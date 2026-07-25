@@ -1,0 +1,452 @@
+{
+  "checkedAt": "2026-07-25T20:48:33.720Z",
+  "summary": {
+    "ok": 47,
+    "auth_or_blocked": 2
+  },
+  "results": [
+    {
+      "id": "academic-success",
+      "name": "Academic Success Center",
+      "url": "https://www.purdue.edu/asc/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/asc/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "bgr",
+      "name": "Boiler Gold Rush",
+      "url": "https://www.purdue.edu/orientation/bgr/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/orientation/bgr/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "boilerclasses",
+      "name": "BoilerClasses",
+      "url": "https://boilerclasses.com/",
+      "status": 200,
+      "finalUrl": "https://boilerclasses.com/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "boilerconnect",
+      "name": "BoilerConnect",
+      "url": "https://www.purdue.edu/boilerconnect/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/teaching-learning/programs/sst/",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "boilerexams",
+      "name": "BoilerExams",
+      "url": "https://boilerexams.com/",
+      "status": 200,
+      "finalUrl": "https://boilerexams.com/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "boilergrades",
+      "name": "BoilerGrades",
+      "url": "https://www.boilergrades.com/",
+      "status": 200,
+      "finalUrl": "https://www.boilergrades.com/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "boilerlink",
+      "name": "BoilerLink",
+      "url": "https://boilerlink.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://boilerlink.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "boilerlink-organizations",
+      "name": "BoilerLink organizations",
+      "url": "https://boilerlink.purdue.edu/organizations",
+      "status": 200,
+      "finalUrl": "https://boilerlink.purdue.edu/organizations",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "brightspace",
+      "name": "Brightspace",
+      "url": "https://purdue.brightspace.com/",
+      "status": 200,
+      "finalUrl": "https://purdue.brightspace.com/d2l/login",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "brightspace-info",
+      "name": "Brightspace resources",
+      "url": "https://www.purdue.edu/brightspace/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/brightspace/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "campus-transit",
+      "name": "Campus mobility & transit",
+      "url": "https://www.purdue.edu/operations/campus-mobility/home/campus-transit/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/operations/campus-mobility/home/campus-transit/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "care",
+      "name": "CARE",
+      "url": "https://care.purdue.edu/resources/students.html",
+      "status": 200,
+      "finalUrl": "https://care.purdue.edu/resources/students.html",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "cco",
+      "name": "Center for Career Opportunities",
+      "url": "https://www.cco.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://www.cco.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "chenflix",
+      "name": "ChenFlix",
+      "url": "https://drjchen1.github.io/chenflix/",
+      "status": 200,
+      "finalUrl": "https://drjchen1.github.io/chenflix/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "citybus",
+      "name": "CityBus information",
+      "url": "https://www.purdue.edu/operations/campus-mobility/home/citybus/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/operations/campus-mobility/home/citybus/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "codo",
+      "name": "CODO requirements",
+      "url": "https://www.purdue.edu/advisors/codo/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/advisors/codo/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "science-dual-program",
+      "name": "College of Science multiple-program policy",
+      "url": "https://www.purdue.edu/science/Current_Students/codo/Dual%20Major.html",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/science/Current_Students/codo/Dual%20Major.html",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "caps",
+      "name": "Counseling and Psychological Services",
+      "url": "https://www.purdue.edu/caps/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/caps/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "degree-plus",
+      "name": "Degree Plus",
+      "url": "https://www.cla.purdue.edu/academic/degreeplus/index.html",
+      "status": 200,
+      "finalUrl": "https://www.cla.purdue.edu/academic/degreeplus/index.html",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "drc",
+      "name": "Disability Resource Center",
+      "url": "https://www.purdue.edu/drc/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/drc/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "financial-aid",
+      "name": "Division of Financial Aid",
+      "url": "https://www.purdue.edu/dfa/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/dfa/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "mypurdue",
+      "name": "myPurdue",
+      "url": "https://mypurdue.purdue.edu/",
+      "status": 403,
+      "finalUrl": "https://eee-api.10005.elluciancloud.com/saml-prod/auth",
+      "redirected": true,
+      "classification": "auth_or_blocked",
+      "note": "Authentication or automated-request blocking requires manual review."
+    },
+    {
+      "id": "mypurdue-info",
+      "name": "myPurdue information",
+      "url": "https://it.purdue.edu/services/mypurdue.php",
+      "status": 200,
+      "finalUrl": "https://it.purdue.edu/services/mypurdue.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "odos-financial",
+      "name": "ODOS financial resources",
+      "url": "https://www.purdue.edu/odos/resources/financial.html",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/support/resources/campus/financial.php",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "health-wellness-directory",
+      "name": "ODOS health & wellness directory",
+      "url": "https://www.purdue.edu/odos/support/resources/campus/health-wellness.php",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/support/resources/campus/health-wellness.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "bursar",
+      "name": "Office of the Bursar",
+      "url": "https://www.purdue.edu/treasurer/finance/bursar-office/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/treasurer/finance/bursar-office/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "odos",
+      "name": "Office of the Dean of Students",
+      "url": "https://www.purdue.edu/odos/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "onepurdue",
+      "name": "OnePurdue",
+      "url": "https://one.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://one.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "mycco",
+      "name": "Purdue Career Gateway",
+      "url": "https://www.cco.purdue.edu/Students/CareerGateway",
+      "status": 200,
+      "finalUrl": "https://www.cco.purdue.edu/Students/CareerGateway",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "catalog",
+      "name": "Purdue Catalog",
+      "url": "https://catalog.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://catalog.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "course-insights",
+      "name": "Purdue Course Insights",
+      "url": "https://sswis.mypurdue.purdue.edu/CourseInsights/",
+      "status": 403,
+      "finalUrl": "https://sswis.mypurdue.purdue.edu/CourseInsights/",
+      "redirected": false,
+      "classification": "auth_or_blocked",
+      "note": "Authentication or automated-request blocking requires manual review."
+    },
+    {
+      "id": "current-students",
+      "name": "Purdue current-student hub",
+      "url": "https://www.purdue.edu/home/current-students/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/home/current-students/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "dining",
+      "name": "Purdue Dining & Culinary",
+      "url": "https://dining.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://dining.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "emergency-information",
+      "name": "Purdue emergency status",
+      "url": "https://www.purdue.edu/emergency/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/emergency/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "libraries",
+      "name": "Purdue Libraries",
+      "url": "https://www.lib.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://lib.purdue.edu/",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "location-change",
+      "name": "Purdue Location Change",
+      "url": "https://www.purdue.edu/advisors/locationchange.php",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/advisors/locationchange.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "purdue-owl",
+      "name": "Purdue OWL",
+      "url": "https://owl.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://owl.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "service-portal",
+      "name": "Purdue Service Portal",
+      "url": "https://service.purdue.edu/TDClient/32/Purdue/Home/",
+      "status": 200,
+      "finalUrl": "https://service.purdue.edu/TDClient/32/Purdue/Home/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "push",
+      "name": "Purdue University Student Health",
+      "url": "https://www.purdue.edu/push/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/push/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "rate-my-professors",
+      "name": "Rate My Professors — Purdue",
+      "url": "https://www.ratemyprofessors.com/search/professors/783?q=*",
+      "status": 200,
+      "finalUrl": "https://www.ratemyprofessors.com/search/professors/783",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "recwell",
+      "name": "Recreation & Wellness",
+      "url": "https://www.purdue.edu/recwell/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/recwell/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "registrar",
+      "name": "Registrar — current students",
+      "url": "https://www.purdue.edu/registrar/currentStudents/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/registrar/currentStudents/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "report-concern",
+      "name": "Report a concern",
+      "url": "https://www.purdue.edu/odos/report/index.php",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/report/index.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "career-resources",
+      "name": "Student career resources",
+      "url": "https://www.cco.purdue.edu/students/resources",
+      "status": 200,
+      "finalUrl": "https://www.cco.purdue.edu/Students/WhatWeOffer",
+      "redirected": true,
+      "classification": "ok"
+    },
+    {
+      "id": "student-legal-services",
+      "name": "Student Legal Services",
+      "url": "https://www.purdue.edu/odos/sls/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/sls/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "supplemental-instruction",
+      "name": "Supplemental Instruction",
+      "url": "https://www.purdue.edu/asc/si/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/asc/si/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "tutoring-directory",
+      "name": "Tutoring & help-center directory",
+      "url": "https://www.purdue.edu/asc/resources/tutoring.html",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/asc/resources/tutoring.html",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "housing",
+      "name": "University Residences",
+      "url": "https://www.housing.purdue.edu/",
+      "status": 200,
+      "finalUrl": "https://www.housing.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "campus-map",
+      "name": "West Lafayette campus map",
+      "url": "https://www.purdue.edu/campus_map/",
+      "status": 200,
+      "finalUrl": "https://purdueuniversity.maps.arcgis.com/apps/instant/basic/index.html",
+      "redirected": true,
+      "classification": "ok"
+    }
+  ]
+}
