@@ -31,7 +31,7 @@ Open <http://localhost:3000>.
 ### Environment variables
 
 ```dotenv
-NEXT_PUBLIC_SITE_URL=https://boilercompass.vercel.app
+NEXT_PUBLIC_SITE_URL=https://purdueboilercompass.vercel.app
 NEXT_PUBLIC_CORRECTIONS_URL=https://github.com/JugPanda/boilercompass/issues/new
 ```
 

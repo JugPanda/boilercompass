@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AlertTriangle, ArrowLeft, ArrowRight, Clock3 } from "lucide-react";
+import { GuideToc } from "@/components/guide-toc";
 import { ResourceCard } from "@/components/resource-card";
 import { guideBySlug, guides } from "@/data/guides";
 import { resourceRegistry } from "@/data/resources";
@@ -55,14 +56,7 @@ export default async function GuidePage({
         </span>
       </header>
       <div className="guide-body">
-        <nav className="guide-toc" aria-label="On this page">
-          <strong>On this page</strong>
-          {guide.sections.map((section, index) => (
-            <a key={section.heading} href={`#step-${index + 1}`}>
-              0{index + 1} {section.heading}
-            </a>
-          ))}
-        </nav>
+        <GuideToc headings={guide.sections.map((section) => section.heading)} />
         <article>
           {guide.sections.map((section, index) => (
             <section key={section.heading} id={`step-${index + 1}`}>

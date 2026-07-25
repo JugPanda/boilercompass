@@ -3,14 +3,14 @@ import { PhoneCall } from "lucide-react";
 
 export function EmergencyNotice() {
   return (
-    <div className="emergency-notice" role="note">
+    <aside className="emergency-notice" aria-label="Emergency help">
       <div className="shell">
         <PhoneCall size={16} aria-hidden="true" />
         <span>
-          <strong>Immediate emergency?</strong> Call 911.
+          <strong>Call 911 for an immediate emergency.</strong>
         </span>
         <Link href="/support">View Purdue support resources</Link>
       </div>
-    </div>
+    </aside>
   );
 }

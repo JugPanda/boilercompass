@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { EmergencyNotice } from "@/components/emergency-notice";
+import { SearchLauncherProvider } from "@/components/search-launcher";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -53,13 +54,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body>
         <ThemeProvider>
-          <a className="skip-link" href="#main-content">
-            Skip to content
-          </a>
-          <EmergencyNotice />
-          <SiteHeader />
-          <main id="main-content">{children}</main>
-          <SiteFooter />
+          <SearchLauncherProvider>
+            <a className="skip-link" href="#main-content">
+              Skip to content
+            </a>
+            <EmergencyNotice />
+            <SiteHeader />
+            <main id="main-content">{children}</main>
+            <SiteFooter />
+          </SearchLauncherProvider>
         </ThemeProvider>
       </body>
     </html>
