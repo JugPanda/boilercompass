@@ -7,6 +7,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FAVORITES_KEY,
@@ -14,6 +15,7 @@ import {
   readIds,
   ResourceCard,
 } from "@/components/resource-card";
+import { SourceLabelHelp } from "@/components/source-label-help";
 import {
   audiences,
   campuses,
@@ -36,24 +38,58 @@ type View = "all" | "favorites" | "recent";
 type ActiveFilter = {
   key: string;
   label: string;
-  clear: () => void;
 };
+
+function allowedValue<T extends string>(
+  value: string | null,
+  allowed: readonly T[],
+  fallback: T,
+) {
+  return value && allowed.includes(value as T) ? (value as T) : fallback;
+}
 
 export function ResourceDirectory({
   initialQuery = "",
 }: {
   initialQuery?: string;
 }) {
-  const [query, setQuery] = useState(initialQuery);
-  const [category, setCategory] = useState("all");
-  const [source, setSource] = useState<ResourceSourceType | "all">("all");
-  const [campus, setCampus] = useState<Campus | "all">("all");
-  const [audience, setAudience] = useState<Audience | "all">("all");
-  const [login, setLogin] = useState<"all" | "yes" | "no">("all");
-  const [sort, setSort] = useState<"featured" | "alphabetical" | "verified">(
-    "featured",
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const queryParam = searchParams.get("q") ?? initialQuery;
+  const query = queryParam;
+  const category = allowedValue(
+    searchParams.get("category"),
+    categories,
+    "all",
   );
-  const [view, setView] = useState<View>("all");
+  const source = allowedValue(
+    searchParams.get("source"),
+    sourceTypes,
+    "all",
+  ) as ResourceSourceType | "all";
+  const campus = allowedValue(searchParams.get("campus"), campuses, "all") as
+    Campus | "all";
+  const audience = allowedValue(
+    searchParams.get("audience"),
+    audiences,
+    "all",
+  ) as Audience | "all";
+  const login = allowedValue(
+    searchParams.get("login"),
+    ["yes", "no"] as const,
+    "all",
+  ) as "all" | "yes" | "no";
+  const sort = allowedValue(
+    searchParams.get("sort"),
+    ["featured", "alphabetical", "verified"] as const,
+    "relevance",
+  ) as "relevance" | "featured" | "alphabetical" | "verified";
+  const view = allowedValue(
+    searchParams.get("view"),
+    ["favorites", "recent"] as const,
+    "all",
+  ) as View;
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(18);
   const [announcement, setAnnouncement] = useState("");
@@ -63,6 +99,31 @@ export function ResourceDirectory({
   });
   const filterButtonRef = useRef<HTMLButtonElement>(null);
   const filterBodyRef = useRef<HTMLDivElement>(null);
+  const pendingParamsRef = useRef(new URLSearchParams(searchParams.toString()));
+
+  useEffect(() => {
+    pendingParamsRef.current = new URLSearchParams(searchParams.toString());
+  }, [searchParams]);
+
+  function setUrlValue(key: string, value: string, replace = false) {
+    const next = new URLSearchParams(pendingParamsRef.current.toString());
+    if (!value || value === "all" || value === "relevance") next.delete(key);
+    else next.set(key, value);
+    pendingParamsRef.current = next;
+    const href = next.size ? `${pathname}?${next.toString()}` : pathname;
+    if (replace) router.replace(href, { scroll: false });
+    else router.push(href, { scroll: false });
+  }
+
+  function updateQuery(value: string) {
+    setUrlValue("q", value, true);
+  }
+
+  function openSavedView(nextView: Exclude<View, "all">) {
+    const next = new URLSearchParams();
+    next.set("view", nextView);
+    router.push(`${pathname}?${next.toString()}`, { scroll: false });
+  }
 
   useEffect(() => {
     const sync = () =>
@@ -98,7 +159,9 @@ export function ResourceDirectory({
       audience,
       requiresLogin: login,
     });
-    return view === "recent" ? items : sortResources(items, sort);
+    if (view === "recent") return items;
+    if (query && sort === "relevance") return items;
+    return sortResources(items, sort === "relevance" ? "featured" : sort);
   }, [query, category, source, campus, audience, login, sort, view, stored]);
 
   const hasFilters = Boolean(
@@ -117,53 +180,41 @@ export function ResourceDirectory({
     activeFilters.push({
       key: "query",
       label: `Search: ${query}`,
-      clear: () => setQuery(""),
     });
   }
   if (category !== "all") {
     activeFilters.push({
       key: "category",
       label: category,
-      clear: () => setCategory("all"),
     });
   }
   if (source !== "all") {
     activeFilters.push({
       key: "source",
       label: sourceLabel(source),
-      clear: () => setSource("all"),
     });
   }
   if (campus !== "all") {
     activeFilters.push({
       key: "campus",
       label: campusLabel(campus),
-      clear: () => setCampus("all"),
     });
   }
   if (audience !== "all") {
     activeFilters.push({
       key: "audience",
       label: audienceLabel(audience),
-      clear: () => setAudience("all"),
     });
   }
   if (login !== "all") {
     activeFilters.push({
       key: "login",
       label: login === "yes" ? "Login required" : "No login required",
-      clear: () => setLogin("all"),
     });
   }
 
   function reset() {
-    setQuery("");
-    setCategory("all");
-    setSource("all");
-    setCampus("all");
-    setAudience("all");
-    setLogin("all");
-    setSort("featured");
+    router.push(pathname, { scroll: false });
   }
 
   useEffect(() => {
@@ -236,7 +287,7 @@ export function ResourceDirectory({
         >
           <span>
             <SlidersHorizontal size={17} aria-hidden="true" />
-            Filter resources
+            More filters
             {activeFilters.length > 0 && (
               <small aria-label={`${activeFilters.length} active filters`}>
                 {activeFilters.length}
@@ -265,8 +316,8 @@ export function ResourceDirectory({
         >
           <div className="filter-heading">
             <div>
-              <span className="filter-sheet-kicker">Refine your route</span>
-              <strong id="filter-panel-title">Filter resources</strong>
+              <span className="filter-sheet-kicker">Optional controls</span>
+              <strong id="filter-panel-title">More filters</strong>
             </div>
             <div>
               {hasFilters && (
@@ -288,7 +339,7 @@ export function ResourceDirectory({
             Category
             <select
               value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              onChange={(event) => setUrlValue("category", event.target.value)}
             >
               <option value="all">All categories</option>
               {categories.map((item) => (
@@ -297,12 +348,10 @@ export function ResourceDirectory({
             </select>
           </label>
           <label>
-            Source type
+            Who runs it?
             <select
               value={source}
-              onChange={(event) =>
-                setSource(event.target.value as typeof source)
-              }
+              onChange={(event) => setUrlValue("source", event.target.value)}
             >
               <option value="all">All sources</option>
               {sourceTypes.map((item) => (
@@ -313,12 +362,10 @@ export function ResourceDirectory({
             </select>
           </label>
           <label>
-            Campus scope
+            Campus/location
             <select
               value={campus}
-              onChange={(event) =>
-                setCampus(event.target.value as typeof campus)
-              }
+              onChange={(event) => setUrlValue("campus", event.target.value)}
             >
               <option value="all">All campus scopes</option>
               {campuses.map((item) => (
@@ -332,9 +379,7 @@ export function ResourceDirectory({
             Audience
             <select
               value={audience}
-              onChange={(event) =>
-                setAudience(event.target.value as typeof audience)
-              }
+              onChange={(event) => setUrlValue("audience", event.target.value)}
             >
               <option value="all">All audiences</option>
               {audiences.map((item) => (
@@ -348,7 +393,7 @@ export function ResourceDirectory({
             Login requirement
             <select
               value={login}
-              onChange={(event) => setLogin(event.target.value as typeof login)}
+              onChange={(event) => setUrlValue("login", event.target.value)}
             >
               <option value="all">Any</option>
               <option value="yes">Login required</option>
@@ -371,22 +416,23 @@ export function ResourceDirectory({
           <div className="directory-search">
             <Search size={18} aria-hidden="true" />
             <label className="sr-only" htmlFor="resource-search">
-              Search resources
+              Search within resources
             </label>
             <input
               id="resource-search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search names, tags, aliases, or needs"
+              onChange={(event) => updateQuery(event.target.value)}
+              placeholder="Try “tutoring,” “pay my bill,” or “CODO”"
             />
           </div>
           <label className="sort-control">
             Sort
             <select
               value={sort}
-              onChange={(event) => setSort(event.target.value as typeof sort)}
+              onChange={(event) => setUrlValue("sort", event.target.value)}
               disabled={view === "recent"}
             >
+              <option value="relevance">Best match</option>
               <option value="featured">Featured first</option>
               <option value="alphabetical">A–Z</option>
               <option value="verified">Recently verified</option>
@@ -394,12 +440,37 @@ export function ResourceDirectory({
           </label>
         </div>
 
+        {view === "all" && (
+          <>
+            <div className="common-category-chips" aria-label="Common tasks">
+              <span>Common tasks:</span>
+              {[
+                "Classes & academics",
+                "Health, support & safety",
+                "Money & administration",
+              ].map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  aria-pressed={category === item}
+                  onClick={() =>
+                    setUrlValue("category", category === item ? "all" : item)
+                  }
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <SourceLabelHelp />
+          </>
+        )}
+
         <div className="view-tabs" role="group" aria-label="Resource views">
           <button
             type="button"
             className={view === "all" ? "active" : ""}
             aria-pressed={view === "all"}
-            onClick={() => setView("all")}
+            onClick={() => setUrlValue("view", "all")}
           >
             All
           </button>
@@ -407,7 +478,7 @@ export function ResourceDirectory({
             type="button"
             className={view === "favorites" ? "active" : ""}
             aria-pressed={view === "favorites"}
-            onClick={() => setView("favorites")}
+            onClick={() => openSavedView("favorites")}
           >
             Favorites <span>{stored.favorites.length}</span>
           </button>
@@ -415,7 +486,7 @@ export function ResourceDirectory({
             type="button"
             className={view === "recent" ? "active" : ""}
             aria-pressed={view === "recent"}
-            onClick={() => setView("recent")}
+            onClick={() => openSavedView("recent")}
           >
             Recently opened <span>{stored.recent.length}</span>
           </button>
@@ -428,7 +499,15 @@ export function ResourceDirectory({
           >
             <span>Active:</span>
             {activeFilters.map((filter) => (
-              <button key={filter.key} type="button" onClick={filter.clear}>
+              <button
+                key={filter.key}
+                type="button"
+                onClick={() =>
+                  filter.key === "query"
+                    ? updateQuery("")
+                    : setUrlValue(filter.key, "all")
+                }
+              >
                 {filter.label} <X size={13} aria-hidden="true" />
                 <span className="sr-only">Remove filter</span>
               </button>
@@ -441,15 +520,30 @@ export function ResourceDirectory({
 
         <div className="results-heading">
           <div>
-            <p className="eyebrow">Curated registry</p>
+            <p className="eyebrow">Purdue resource directory</p>
             <h2 id="results-title">
-              {results.length} {results.length === 1 ? "resource" : "resources"}
+              {results.length}{" "}
+              {view === "favorites"
+                ? results.length === 1
+                  ? "favorite"
+                  : "favorites"
+                : view === "recent"
+                  ? results.length === 1
+                    ? "recently opened resource"
+                    : "recently opened resources"
+                  : results.length === 1
+                    ? "resource"
+                    : "resources"}
             </h2>
           </div>
           <p>
-            {query
-              ? `Results for “${query}”`
-              : "Search understands shortcuts like bs, mp, bc, and clubs."}
+            {view === "favorites"
+              ? "Saved only in this browser—no account or cloud sync."
+              : view === "recent"
+                ? "Opened on this device and stored only in this browser."
+                : query
+                  ? `Results for “${query}”`
+                  : "Search by a task or office name—you do not need to know an acronym."}
           </p>
           <span className="sr-only" aria-live="polite" aria-atomic="true">
             {announcement}
@@ -484,18 +578,27 @@ export function ResourceDirectory({
           </>
         ) : (
           <div className="empty-state">
-            <span>0</span>
-            <h3>No resources match</h3>
+            <span aria-hidden="true">0</span>
+            <h3>
+              {view === "favorites"
+                ? "No favorites yet"
+                : view === "recent"
+                  ? "Nothing opened yet"
+                  : `No resources match${query ? ` “${query}”` : ""}`}
+            </h3>
             <p>
-              Try a broader task, search an alias, or remove one of the active
-              filters.
+              {view === "favorites"
+                ? "Save resources for quicker access on this device. No account is needed, and favorites stay in this browser."
+                : view === "recent"
+                  ? "Resources you open will appear here for quicker access on this device. This history stays in your browser."
+                  : "Try a plain-language task, remove a filter, or browse every resource."}
             </p>
             <button
               className="button button-secondary"
               type="button"
               onClick={reset}
             >
-              Reset filters
+              Browse all resources
             </button>
           </div>
         )}

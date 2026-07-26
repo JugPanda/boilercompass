@@ -42,6 +42,6 @@ test("open mobile navigation and filter sheet have no material axe violations", 
 
   await page.keyboard.press("Escape");
   await page.goto("/resources");
-  await page.getByRole("button", { name: "Filter resources" }).click();
+  await page.getByRole("button", { name: "More filters" }).click();
   await expectNoMaterialViolations(page);
 });

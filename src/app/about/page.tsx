@@ -26,23 +26,23 @@ export default function AboutPage() {
   return (
     <div className="page-shell about-page">
       <header className="page-header">
-        <p className="eyebrow">Method over marketing</p>
-        <h1>Useful because the source is visible.</h1>
+        <p className="eyebrow">About BoilerCompass</p>
+        <h1>Know who runs a link before you open it.</h1>
         <p>
-          BoilerCompass is an independent student resource directory. It does
-          not imitate Purdue systems, collect Purdue credentials, or make
-          academic decisions for students.
+          BoilerCompass is an unofficial, independent student resource guide. No
+          account is needed, and the site does not collect Purdue passwords or
+          make academic decisions for students.
         </p>
       </header>
       <section className="method-grid">
         <div>
           <Database />
-          <h2>Structured registry</h2>
+          <h2>What this site does</h2>
           <p>
-            Resources live in a typed, schema-validated registry rather than
-            being scattered through hard-coded cards. Every record carries
-            category, tags, source, campus, audience, login, aliases, caution,
-            and a last-verified date.
+            BoilerCompass brings common Purdue and student resources into one
+            searchable directory. Each listing explains who runs the
+            destination, where it applies, whether login is expected, and when
+            its link was checked.
           </p>
         </div>
         <div>
@@ -68,12 +68,12 @@ export default function AboutPage() {
         </div>
         <div>
           <CheckCircle2 />
-          <h2>Selection</h2>
+          <h2>How the directory is maintained</h2>
           <p>
-            A resource should answer a common student need, have a clear
-            operator, and add enough context to prevent a blind click.
-            BoilerCompass does not publish fake status, deadlines, popularity,
-            or usage data.
+            Listings live in a typed, schema-validated registry. A resource must
+            answer a common student need, have a clear operator, and add enough
+            context to prevent a blind click. BoilerCompass does not invent
+            deadlines, popularity, status, or usage data.
           </p>
         </div>
       </section>
@@ -106,6 +106,7 @@ export default function AboutPage() {
             href={correctionUrl.toString()}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Report a correction in a new tab"
           >
             Report a correction
           </a>
@@ -117,7 +118,6 @@ export default function AboutPage() {
           BoilerCompass is an independent student resource directory and is not
           affiliated with, endorsed by, or operated by Purdue University. Purdue
           names and third-party service names belong to their respective owners.
-          This notice should receive legal review before broad public launch.
         </p>
       </section>
     </div>

@@ -46,6 +46,7 @@ export const resourceSchema = z.object({
   aliases: z.array(z.string()),
   lastVerified: z.iso.date(),
   caution: z.string().optional(),
+  officialAlternativeIds: z.array(z.string()).optional(),
 });
 
 export const resourceRegistrySchema = z.array(resourceSchema);
@@ -502,6 +503,7 @@ const records: Resource[] = [
     lastVerified: V,
     caution:
       "Not an official registration or degree-audit source. Verify all decisions in myPurdue, the Catalog, and with your advisor.",
+    officialAlternativeIds: ["catalog", "mypurdue"],
   }),
   r({
     id: "boilergrades",

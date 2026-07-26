@@ -19,9 +19,10 @@ export function ResourceLaunchButton({
       target="_blank"
       rel="noopener noreferrer"
       onClick={() => saveRecent(id)}
+      aria-label={`Open ${name} in a new tab`}
     >
       Open {name}
-      <ArrowUpRight size={17} />
+      <ArrowUpRight size={17} aria-hidden="true" />
     </a>
   );
 }

@@ -7,8 +7,8 @@ import {
 
 const suggestedSearches = [
   ["Plan classes", "course planning"],
-  ["Academic help", "academic help"],
-  ["Health & support", "health support"],
+  ["Find tutoring", "find tutoring"],
+  ["Pay my bill", "pay my bill"],
 ] as const;
 
 export function GlobalSearch({ compact = false }: { compact?: boolean }) {
@@ -20,13 +20,45 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
         compact ? "global-search-wrap is-compact" : "global-search-wrap"
       }
     >
+      {!compact && (
+        <p className="global-search-label">What do you need help with?</p>
+      )}
       <SearchLauncherTrigger
-        className="global-search"
-        label="Search by task, tool, or shortcut"
+        className="global-search js-only"
+        label={
+          compact
+            ? "Search resources"
+            : "Try “plan classes,” “find tutoring,” or “pay my bill”"
+        }
         showShortcut
       />
+      <noscript>
+        <style>{`.js-only { display: none !important; }`}</style>
+        <form className="noscript-search" action="/resources" method="get">
+          <label
+            htmlFor={
+              compact ? "noscript-search-compact" : "noscript-search-home"
+            }
+          >
+            Search Purdue resources
+          </label>
+          <div>
+            <input
+              id={compact ? "noscript-search-compact" : "noscript-search-home"}
+              name="q"
+              placeholder="Try tutoring or pay my bill"
+            />
+            <button className="button button-primary" type="submit">
+              Search
+            </button>
+          </div>
+        </form>
+      </noscript>
       {!compact && (
-        <div className="suggested-searches" aria-label="Suggested searches">
+        <div
+          className="suggested-searches js-only"
+          aria-label="Suggested searches"
+        >
           <span>Try:</span>
           {suggestedSearches.map(([label, query]) => (
             <button key={query} type="button" onClick={() => openSearch(query)}>

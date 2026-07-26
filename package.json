@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "check:links": "tsx scripts/check-links.ts",
     "screenshots": "tsx scripts/capture-screenshots.ts",
-    "capture:upgrade": "tsx scripts/capture-upgrade-artifacts.ts"
+    "capture:upgrade": "tsx scripts/capture-upgrade-artifacts.ts",
+    "capture:novice": "tsx scripts/capture-novice-artifacts.ts"
   },
   "dependencies": {
     "fuse.js": "^7.5.0",

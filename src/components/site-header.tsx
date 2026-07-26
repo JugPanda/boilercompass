@@ -106,7 +106,7 @@ export function SiteHeader() {
                 isCurrent(pathname, "/support") ? "page" : undefined
               }
             >
-              <ShieldPlus size={17} /> <span>Support now</span>
+              <ShieldPlus size={17} /> <span>Emergency & support</span>
             </Link>
             <ThemeToggle />
             <button
@@ -162,7 +162,7 @@ export function SiteHeader() {
               }}
             >
               <Search size={18} /> Search resources
-              <kbd aria-hidden="true">⌘K</kbd>
+              <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
             </button>
             <nav aria-label="Mobile navigation">
               {nav.map(([label, href], index) => (
@@ -172,7 +172,7 @@ export function SiteHeader() {
                   aria-current={isCurrent(pathname, href) ? "page" : undefined}
                   onClick={closeMenu}
                 >
-                  <span>0{index + 1}</span> {label}
+                  <span aria-hidden="true">0{index + 1}</span> {label}
                 </Link>
               ))}
             </nav>

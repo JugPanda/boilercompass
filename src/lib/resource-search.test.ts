@@ -17,6 +17,16 @@ describe("resource search", () => {
     ["therapy", "caps"],
     ["doctor", "push"],
     ["boilercourses", "boilerclasses"],
+    ["view coursework", "brightspace"],
+    ["find tutoring", "tutoring-directory"],
+    ["change my major", "codo"],
+    ["pay my bill", "bursar"],
+    ["find a student organization", "boilerlink"],
+    ["drop a class", "registrar"],
+    ["transcript", "registrar"],
+    ["degree audit", "mypurdue"],
+    ["sexual assault", "care"],
+    ["food insecurity", "odos-financial"],
   ])("maps shortcut %s to %s", (query, expectedId) => {
     expect(searchResources(resourceRegistry, query)[0]?.id).toBe(expectedId);
   });

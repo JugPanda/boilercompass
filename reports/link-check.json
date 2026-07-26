@@ -1,9 +1,8 @@
 {
-  "checkedAt": "2026-07-25T22:49:14.863Z",
+  "checkedAt": "2026-07-26T00:39:39.626Z",
   "summary": {
-    "ok": 46,
-    "auth_or_blocked": 2,
-    "inconclusive": 1
+    "ok": 47,
+    "auth_or_blocked": 2
   },
   "results": [
     {
@@ -218,8 +217,10 @@
       "id": "odos-financial",
       "name": "ODOS financial resources",
       "url": "https://www.purdue.edu/odos/resources/financial.html",
-      "classification": "inconclusive",
-      "note": "fetch failed"
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/odos/support/resources/campus/financial.php",
+      "redirected": true,
+      "classification": "ok"
     },
     {
       "id": "health-wellness-directory",

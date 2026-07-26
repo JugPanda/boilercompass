@@ -73,7 +73,7 @@ async function captureUpgradeArtifacts() {
 
     await mobilePage.goto(`${baseURL}/resources`);
     await settle(mobilePage);
-    await mobilePage.getByRole("button", { name: /Filter resources/ }).click();
+    await mobilePage.getByRole("button", { name: "More filters" }).click();
     await mobilePage.waitForTimeout(280);
     await mobilePage.screenshot({ path: `${output}/mobile-filters.png` });
     await mobile.close();

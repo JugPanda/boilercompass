@@ -51,7 +51,7 @@ export function GuideToc({ headings }: { headings: string[] }) {
             aria-current={activeId === id ? "location" : undefined}
             onClick={(event) => navigate(event, id)}
           >
-            <span>0{index + 1}</span> {heading}
+            <span aria-hidden="true">0{index + 1}</span> {heading}
           </a>
         );
       })}

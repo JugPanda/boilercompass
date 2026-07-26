@@ -18,12 +18,13 @@ export default async function ResourcesPage({
     <div className="page-shell shell-wide">
       <header className="page-header page-header-split">
         <div>
-          <p className="eyebrow">Auditable directory</p>
-          <h1>All resources</h1>
+          <p className="eyebrow">Purdue resource directory</p>
+          <h1>Find a Purdue resource</h1>
         </div>
         <p>
-          Search by what you need, then verify the source, campus scope, and
-          last-checked date before opening it.
+          Search by what you need to do, use common categories, or open more
+          filters when you need them. Favorites and recently opened items stay
+          in this browser—no account is needed.
         </p>
       </header>
       <ResourceDirectory initialQuery={q} />

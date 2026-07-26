@@ -32,7 +32,7 @@ export default function GuidesPage() {
             href={`/guides/${guide.slug}`}
           >
             <div className="guide-card-top">
-              <span>0{index + 1}</span>
+              <span aria-hidden="true">0{index + 1}</span>
               <small>{guide.readTime} read</small>
             </div>
             <p className="eyebrow">{guide.eyebrow}</p>

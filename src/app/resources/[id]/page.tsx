@@ -53,6 +53,9 @@ export default async function ResourceDetailPage({
       (item) => item.category === resource.category && item.id !== resource.id,
     )
     .slice(0, 3);
+  const officialAlternatives = (resource.officialAlternativeIds ?? [])
+    .map((alternativeId) => resourceById.get(alternativeId))
+    .filter(Boolean) as typeof resourceRegistry;
   const correctionUrl = new URL(siteConfig.correctionsUrl);
   correctionUrl.searchParams.set("title", `Correction: ${resource.name}`);
   correctionUrl.searchParams.set(
@@ -85,6 +88,25 @@ export default async function ResourceDetailPage({
               </div>
             </div>
           )}
+          {officialAlternatives.length > 0 && (
+            <section className="official-alternatives">
+              <h2>Official sources to verify</h2>
+              <p>
+                Use the independent tool to explore, then confirm decisions with
+                these Purdue-operated sources.
+              </p>
+              <ul>
+                {officialAlternatives.map((alternative) => (
+                  <li key={alternative.id}>
+                    <Link href={`/resources/${alternative.id}`}>
+                      {alternative.name}
+                    </Link>
+                    <span>{alternative.shortDescription}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           <div className="detail-actions">
             <ResourceLaunchButton
               id={resource.id}
@@ -96,6 +118,7 @@ export default async function ResourceDetailPage({
               href={correctionUrl.toString()}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Report an outdated link in a new tab"
             >
               <Flag size={16} /> Report an outdated link
             </a>

@@ -104,7 +104,7 @@ export default function OpenGraphImage() {
         <span>•</span>
         <span>Guided tasks</span>
         <span>•</span>
-        <span>Campus scope</span>
+        <span>Campus/location</span>
       </div>
     </div>,
     size,

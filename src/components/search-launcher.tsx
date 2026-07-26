@@ -127,7 +127,7 @@ export function SearchLauncherTrigger({
     >
       <Search size={18} aria-hidden="true" />
       <span>{label}</span>
-      {showShortcut && <kbd aria-hidden="true">⌘K</kbd>}
+      {showShortcut && <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>}
     </button>
   );
 }

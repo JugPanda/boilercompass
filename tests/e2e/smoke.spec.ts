@@ -24,7 +24,7 @@ test("keyboard launcher opens, searches an alias, selects a result, and returns 
   await page.goto("/");
 
   const heroSearch = page.getByRole("button", {
-    name: "Search by task, tool, or shortcut",
+    name: /Try “plan classes,” “find tutoring,” or “pay my bill”/,
   });
   await heroSearch.focus();
   await page.keyboard.press("Control+K");
@@ -63,6 +63,128 @@ test("keyboard launcher opens, searches an alias, selects a result, and returns 
   expect(errors).toEqual([]);
 });
 
+test("first viewport explains the product, trust status, search path, and support path", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      name: "Find the right Purdue resource.",
+      level: 1,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Unofficial student resource guide"),
+  ).toBeVisible();
+  await expect(page.getByText("What do you need help with?")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Emergency & support" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Most-used Purdue tools" }),
+  ).toBeVisible();
+});
+
+test("resource cards name internal and external destinations and explain trust", async ({
+  page,
+}) => {
+  await page.goto("/resources?q=boilerclasses");
+  await expect(
+    page.getByText("What do these source labels mean?", { exact: true }),
+  ).toBeVisible();
+  const card = page
+    .getByTestId("resource-results")
+    .getByRole("article")
+    .filter({ has: page.getByRole("heading", { name: "BoilerClasses" }) });
+  await expect(
+    card.getByRole("link", { name: "About BoilerClasses" }),
+  ).toBeVisible();
+  await expect(
+    card.getByRole("link", { name: "Open BoilerClasses in a new tab" }),
+  ).toContainText("Open BoilerClasses");
+  await expect(card.getByText(/Not an official registration/i)).toBeVisible();
+  await expect(card.getByText(/Link verified July 2026/i)).toBeVisible();
+});
+
+test("direct filter URLs restore state and browser history", async ({
+  page,
+}) => {
+  await page.goto(
+    "/resources?q=tutoring&source=official&campus=west_lafayette",
+  );
+  await expect(page.getByLabel("Search within resources")).toHaveValue(
+    "tutoring",
+  );
+  await expect(page.getByLabel("Who runs it?")).toHaveValue("official");
+  await expect(page.getByLabel("Campus/location")).toHaveValue(
+    "west_lafayette",
+  );
+  await page.getByLabel("Campus/location").selectOption("indianapolis");
+  await expect(page).toHaveURL(/campus=indianapolis/);
+  await page.goBack();
+  await expect(page.getByLabel("Campus/location")).toHaveValue(
+    "west_lafayette",
+  );
+});
+
+test("favorites and recently opened explain device-only storage on first use", async ({
+  page,
+}) => {
+  await page.goto("/resources");
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.getByRole("button", { name: /Favorites 0/i }).click();
+  const emptyState = page.locator(".empty-state");
+  await expect(emptyState.getByText(/No account is needed/i)).toBeVisible();
+  await expect(emptyState.getByText(/stay in this browser/i)).toBeVisible();
+  await page.getByRole("button", { name: /Recently opened 0/i }).click();
+  await expect(emptyState.getByText(/open will appear here/i)).toBeVisible();
+});
+
+test("BoilerClasses identifies its operator and official verification sources", async ({
+  page,
+}) => {
+  await page.goto("/resources/boilerclasses");
+  await expect(page.getByText("Purdue-affiliated").first()).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Official sources to verify" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Purdue Catalog/ }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /myPurdue/ })).toBeVisible();
+});
+
+test("essential homepage content is server rendered and visible without JavaScript", async ({
+  browser,
+  request,
+}) => {
+  const response = await request.get("/");
+  const html = await response.text();
+  expect(html).toContain("Find the right Purdue resource.");
+  expect(html).toContain("What do you need help with?");
+  expect(html).toContain("Browse all resources");
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto("/");
+  const heading = page.getByRole("heading", {
+    name: "Find the right Purdue resource.",
+  });
+  await expect(heading).toBeVisible();
+  await expect(heading).toHaveCSS("opacity", "1");
+  await expect(page.getByText("What do you need help with?")).toBeVisible();
+  const fallbackSearch = page.getByLabel("Search Purdue resources");
+  await expect(fallbackSearch).toBeVisible();
+  await fallbackSearch.fill("find tutoring");
+  await fallbackSearch.press("Enter");
+  await expect(page).toHaveURL(/\/resources\?q=find(\+|%20)tutoring/);
+  await expect(
+    page.getByRole("heading", { name: "Tutoring & help-center directory" }),
+  ).toBeVisible();
+  await context.close();
+});
+
 test("directory filters, exposes active state, resets, and persists favorites", async ({
   page,
 }) => {
@@ -70,8 +192,8 @@ test("directory filters, exposes active state, resets, and persists favorites", 
   await page.evaluate(() => localStorage.clear());
   await page.reload();
 
-  await page.getByLabel("Search resources").fill("BoilerClasses");
-  await page.getByLabel("Source type").selectOption("purdue_affiliated");
+  await page.getByLabel("Search within resources").fill("BoilerClasses");
+  await page.getByLabel("Who runs it?").selectOption("purdue_affiliated");
   const boilerClassesCard = page
     .getByTestId("resource-results")
     .getByRole("article")
@@ -136,17 +258,17 @@ test("mobile filter sheet traps focus, applies filters, and closes cleanly", asy
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/resources");
 
-  const filterToggle = page.getByRole("button", { name: "Filter resources" });
+  const filterToggle = page.getByRole("button", { name: "More filters" });
   await expect(filterToggle).toHaveAttribute("aria-expanded", "false");
   await filterToggle.click();
 
-  const sheet = page.getByRole("dialog", { name: "Filter resources" });
+  const sheet = page.getByRole("dialog", { name: "More filters" });
   const close = page
     .getByRole("button", { name: "Close resource filters" })
     .last();
   await expect(sheet).toBeVisible();
   await expect(close).toBeFocused();
-  await sheet.getByLabel("Source type").selectOption("purdue_affiliated");
+  await sheet.getByLabel("Who runs it?").selectOption("purdue_affiliated");
   await sheet.getByRole("button", { name: /Show \d+ resources/ }).click();
   await expect(sheet).toBeHidden();
   await expect(filterToggle).toHaveAttribute("aria-expanded", "false");
@@ -190,7 +312,7 @@ test("reduced-motion mode removes large movement and decorative loops", async ({
   await page.goto("/");
 
   const heroAnimation = await page
-    .getByRole("heading", { name: "Your route through Purdue starts here." })
+    .getByRole("heading", { name: "Find the right Purdue resource." })
     .evaluate((element) => getComputedStyle(element).animationName);
   expect(heroAnimation).toBe("none");
 

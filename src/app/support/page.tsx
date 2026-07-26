@@ -61,6 +61,17 @@ export default function SupportPage() {
           For a mental-health crisis, use Purdue CAPS’ current crisis guidance
           or call or text <strong>988</strong>.
         </p>
+        <div className="crisis-actions" aria-label="Immediate crisis actions">
+          <a className="button button-primary" href="tel:911">
+            Call 911
+          </a>
+          <a className="button button-secondary" href="tel:988">
+            Call 988
+          </a>
+          <a className="button button-secondary" href="sms:988">
+            Text 988
+          </a>
+        </div>
       </header>
       <section>
         <div className="section-heading">
@@ -77,12 +88,13 @@ export default function SupportPage() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Open ${title} in a new tab`}
             >
               <Icon size={24} />
               <h3>{title}</h3>
               <p>{copy}</p>
               <span>
-                Open official page <ArrowUpRight size={16} />
+                Open {title} <ArrowUpRight size={16} aria-hidden="true" />
               </span>
             </a>
           ))}

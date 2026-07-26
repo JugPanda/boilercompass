@@ -27,19 +27,32 @@ function readIds(key: string): string[] {
 
 function verifiedLabel(value: string) {
   return new Intl.DateTimeFormat("en-US", {
-    month: "short",
+    month: "long",
     year: "numeric",
     timeZone: "UTC",
   }).format(new Date(`${value}T00:00:00Z`));
 }
 
+function writeIds(key: string, ids: string[]) {
+  try {
+    localStorage.setItem(key, JSON.stringify(ids));
+    window.dispatchEvent(new CustomEvent("boilercompass:storage"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function saveRecent(id: string) {
-  const next = [
-    id,
-    ...readIds(RECENTS_KEY).filter((item) => item !== id),
-  ].slice(0, 8);
-  localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
-  window.dispatchEvent(new CustomEvent("boilercompass:storage"));
+  try {
+    const next = [
+      id,
+      ...readIds(RECENTS_KEY).filter((item) => item !== id),
+    ].slice(0, 8);
+    return writeIds(RECENTS_KEY, next);
+  } catch {
+    return false;
+  }
 }
 
 export function ResourceCard({
@@ -50,6 +63,7 @@ export function ResourceCard({
   favorite?: boolean;
 }) {
   const [localFavorite, setLocalFavorite] = useState(false);
+  const [storageMessage, setStorageMessage] = useState("");
   const favorite = controlledFavorite ?? localFavorite;
 
   useEffect(() => {
@@ -67,9 +81,18 @@ export function ResourceCard({
     const next = nextFavorite
       ? [...ids, resource.id]
       : ids.filter((id) => id !== resource.id);
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+    if (!writeIds(FAVORITES_KEY, next)) {
+      setStorageMessage(
+        "Favorites are unavailable because this browser blocked local storage.",
+      );
+      return;
+    }
     if (controlledFavorite === undefined) setLocalFavorite(nextFavorite);
-    window.dispatchEvent(new CustomEvent("boilercompass:storage"));
+    setStorageMessage(
+      nextFavorite
+        ? `${resource.name} saved in this browser.`
+        : `${resource.name} removed from favorites.`,
+    );
   }
 
   return (
@@ -82,11 +105,15 @@ export function ResourceCard({
           onClick={toggleFavorite}
           aria-label={`${favorite ? "Remove" : "Add"} ${resource.name} ${favorite ? "from" : "to"} favorites`}
           aria-pressed={favorite}
+          aria-describedby={`favorite-help-${resource.id}`}
         >
           <span aria-hidden="true">
             <Heart size={18} fill={favorite ? "currentColor" : "none"} />
           </span>
         </button>
+        <span id={`favorite-help-${resource.id}`} className="sr-only">
+          Favorites stay in this browser. No account is needed.
+        </span>
       </div>
       <div>
         <p className="resource-category">{resource.category}</p>
@@ -100,7 +127,7 @@ export function ResourceCard({
       <div className="resource-meta">
         <span>{resource.campuses.map(campusLabel).join(" · ")}</span>
         <span title={`Last checked ${resource.lastVerified}`}>
-          <CalendarCheck size={14} /> Checked{" "}
+          <CalendarCheck size={14} /> Link verified{" "}
           {verifiedLabel(resource.lastVerified)}
         </span>
         {resource.requiresLogin && (
@@ -110,13 +137,13 @@ export function ResourceCard({
         )}
         {resource.caution && (
           <span className="resource-caution">
-            <AlertTriangle size={14} /> Check details
+            <AlertTriangle size={14} aria-hidden="true" /> {resource.caution}
           </span>
         )}
       </div>
       <div className="resource-actions">
         <Link href={`/resources/${resource.id}`} prefetch={false}>
-          Details
+          About {resource.name}
         </Link>
         <a
           href={resource.url}
@@ -125,9 +152,12 @@ export function ResourceCard({
           onClick={() => saveRecent(resource.id)}
           aria-label={`Open ${resource.name} in a new tab`}
         >
-          Open <ArrowUpRight size={16} />
+          Open {resource.name} <ArrowUpRight size={16} aria-hidden="true" />
         </a>
       </div>
+      <span className="sr-only" aria-live="polite">
+        {storageMessage}
+      </span>
     </article>
   );
 }

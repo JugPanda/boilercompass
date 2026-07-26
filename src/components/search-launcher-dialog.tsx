@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Command,
-  CornerDownLeft,
-  Search,
-  X,
-} from "lucide-react";
+import { ArrowRight, Command, CornerDownLeft, Search, X } from "lucide-react";
 import {
   AnimatePresence,
   MotionConfig,
@@ -267,7 +260,10 @@ export function SearchLauncherDialog({
                             onPointerMove={() => setActiveIndex(index)}
                             onClick={() => choose(resource.id)}
                           >
-                            <span className="launcher-result-index">
+                            <span
+                              className="launcher-result-index"
+                              aria-hidden="true"
+                            >
                               {String(index + 1).padStart(2, "0")}
                             </span>
                             <span className="launcher-result-copy">
@@ -279,7 +275,7 @@ export function SearchLauncherDialog({
                                 {campusLabel(resource.campuses[0])}
                               </span>
                             </span>
-                            <ArrowUpRight size={18} aria-hidden="true" />
+                            <ArrowRight size={18} aria-hidden="true" />
                           </button>
                         </li>
                       ))}
@@ -313,7 +309,7 @@ export function SearchLauncherDialog({
                   close
                 </span>
                 <Link
-                  href={`/resources${query.trim() ? `?q=${encodeURIComponent(query)}` : ""}`}
+                  href={`/resources${query.trim() && results.length ? `?q=${encodeURIComponent(query)}` : ""}`}
                   onClick={close}
                 >
                   Browse all results <ArrowRight size={15} />

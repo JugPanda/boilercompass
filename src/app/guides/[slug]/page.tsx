@@ -60,7 +60,9 @@ export default async function GuidePage({
         <article>
           {guide.sections.map((section, index) => (
             <section key={section.heading} id={`step-${index + 1}`}>
-              <span className="step-number">0{index + 1}</span>
+              <span className="step-number" aria-hidden="true">
+                0{index + 1}
+              </span>
               <h2>{section.heading}</h2>
               <p>{section.body}</p>
               {section.checklist && (

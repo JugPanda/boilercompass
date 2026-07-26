@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { GlobalSearch } from "@/components/global-search";
 import { ResourceCard } from "@/components/resource-card";
+import { SourceLabelHelp } from "@/components/source-label-help";
 import { guides } from "@/data/guides";
 import { resourceRegistry } from "@/data/resources";
 
@@ -81,12 +82,12 @@ export default function Home() {
         <div className="shell hero-grid">
           <div className="hero-copy">
             <p className="eyebrow">
-              <Sparkles size={14} /> Independent Purdue resource guide
+              <Sparkles size={14} /> Unofficial student resource guide
             </p>
-            <h1>Your route through Purdue starts here.</h1>
+            <h1>Find the right Purdue resource.</h1>
             <p className="hero-lede">
-              Find the right official portal, understand what it does, and move
-              through common student tasks with fewer dead ends.
+              Search by what you need to do, then see whether each result is
+              official, who it is for, and where it applies.
             </p>
             <GlobalSearch />
             <div className="hero-actions">
@@ -142,12 +143,13 @@ export default function Home() {
           <div className="section-heading split-heading">
             <div>
               <p className="eyebrow">Fast launch</p>
-              <h2>The four doors students open most</h2>
+              <h2>Most-used Purdue tools</h2>
             </div>
             <Link href="/resources">
               See every resource <ArrowRight size={16} />
             </Link>
           </div>
+          <SourceLabelHelp />
           <div className="resource-grid featured-grid">
             {featured.map((resource) => (
               <ResourceCard key={resource.id} resource={resource} />
@@ -170,7 +172,9 @@ export default function Home() {
                 className={`task-card task-${index + 1}`}
                 href={`/resources?q=${encodeURIComponent(query)}`}
               >
-                <span className="task-index">0{index + 1}</span>
+                <span className="task-index" aria-hidden="true">
+                  0{index + 1}
+                </span>
                 <Icon size={24} />
                 <h3>{title}</h3>
                 <p>{copy}</p>
@@ -199,7 +203,7 @@ export default function Home() {
           <div className="guide-stack">
             {guides.slice(0, 4).map((guide, index) => (
               <Link key={guide.slug} href={`/guides/${guide.slug}`}>
-                <span>0{index + 1}</span>
+                <span aria-hidden="true">0{index + 1}</span>
                 <div>
                   <strong>{guide.title}</strong>
                   <p>{guide.summary}</p>
