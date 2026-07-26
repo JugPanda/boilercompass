@@ -28,7 +28,21 @@ export function SiteFooter() {
           affiliated with, endorsed by, or operated by Purdue University. Purdue
           names and third-party service names belong to their respective owners.
         </p>
-        <span>Updated July 2026</span>
+        <div className="footer-meta">
+          <span>Updated July 2026</span>
+          <p className="footer-credit">
+            Built by{" "}
+            <a
+              href="https://jugpandasites.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="JugPanda Sites (opens in a new tab)"
+            >
+              JugPanda Sites
+            </a>{" "}
+            <span aria-hidden="true">↗</span>
+          </p>
+        </div>
       </div>
     </footer>
   );
