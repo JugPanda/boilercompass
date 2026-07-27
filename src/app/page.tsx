@@ -1,65 +1,52 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  BookOpen,
-  BriefcaseBusiness,
-  CircleDollarSign,
-  GraduationCap,
-  HeartPulse,
-  Map,
-  Route,
-  ShieldCheck,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Route, ShieldCheck, Sparkles } from "lucide-react";
 import { GlobalSearch } from "@/components/global-search";
 import { ResourceCard } from "@/components/resource-card";
+import { RouteMotif } from "@/components/route-motif";
 import { SourceLabelHelp } from "@/components/source-label-help";
 import { guides } from "@/data/guides";
-import { resourceRegistry } from "@/data/resources";
+import { resourceRegistry, type ResourceCategory } from "@/data/resources";
+import { categoryIcons } from "@/lib/category-icons";
 
-const tasks = [
+const tasks: Array<{
+  title: string;
+  copy: string;
+  category: ResourceCategory;
+}> = [
   {
     title: "Plan classes",
     copy: "Catalog, registration, course context, and planning tools.",
-    query: "course planning",
-    icon: BookOpen,
+    category: "Classes & academics",
   },
   {
-    title: "Get academic help",
-    copy: "Tutoring, study sessions, writing, and accessibility support.",
-    query: "academic help",
-    icon: GraduationCap,
+    title: "Meet with an advisor",
+    copy: "Advising appointments, degree planning, and decision preparation.",
+    category: "Advising & degree planning",
   },
   {
-    title: "Find an organization",
-    copy: "Browse student groups, events, and campus involvement.",
-    query: "clubs",
-    icon: Users,
+    title: "Find study support",
+    copy: "Tutoring, study sessions, writing, and course tools.",
+    category: "Study & course tools",
   },
   {
-    title: "Career and jobs",
-    copy: "Career coaching, recruiting, internships, and job tools.",
-    query: "career jobs",
-    icon: BriefcaseBusiness,
+    title: "Careers and organizations",
+    copy: "Career coaching, jobs, student groups, and campus involvement.",
+    category: "Careers & involvement",
   },
   {
     title: "Health and support",
     copy: "Medical, counseling, advocacy, and student support.",
-    query: "health support",
-    icon: HeartPulse,
+    category: "Health, support & safety",
   },
   {
     title: "Money and billing",
     copy: "Financial aid, billing, emergency resources, and admin help.",
-    query: "financial billing",
-    icon: CircleDollarSign,
+    category: "Money & administration",
   },
   {
-    title: "Get around campus",
-    copy: "Maps, transit, dining, housing, and recreation.",
-    query: "campus transit",
-    icon: Map,
+    title: "Campus life and transportation",
+    copy: "Maps, transit, dining, housing, recreation, and daily logistics.",
+    category: "Campus life & logistics",
   },
 ];
 
@@ -72,13 +59,7 @@ export default function Home() {
   return (
     <>
       <section className="hero">
-        <div className="hero-map" aria-hidden="true">
-          <span className="ring-one ring" />
-          <span className="ring-two ring" />
-          <span className="route-line" />
-          <span className="map-point point-one" />
-          <span className="map-point point-two" />
-        </div>
+        <RouteMotif />
         <div className="shell hero-grid">
           <div className="hero-copy">
             <p className="eyebrow">
@@ -166,23 +147,26 @@ export default function Home() {
             <p>You do not need to know the name of the Purdue office first.</p>
           </div>
           <div className="task-grid">
-            {tasks.map(({ title, copy, query, icon: Icon }, index) => (
-              <Link
-                key={title}
-                className={`task-card task-${index + 1}`}
-                href={`/resources?q=${encodeURIComponent(query)}`}
-              >
-                <span className="task-index" aria-hidden="true">
-                  0{index + 1}
-                </span>
-                <Icon size={24} />
-                <h3>{title}</h3>
-                <p>{copy}</p>
-                <span className="task-arrow">
-                  <ArrowRight size={17} />
-                </span>
-              </Link>
-            ))}
+            {tasks.map(({ title, copy, category }, index) => {
+              const Icon = categoryIcons[category];
+              return (
+                <Link
+                  key={title}
+                  className={`task-card task-${index + 1}`}
+                  href={`/resources?category=${encodeURIComponent(category)}`}
+                >
+                  <span className="task-index" aria-hidden="true">
+                    0{index + 1}
+                  </span>
+                  <Icon size={24} aria-hidden="true" />
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                  <span className="task-arrow" aria-hidden="true">
+                    <ArrowRight size={17} />
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

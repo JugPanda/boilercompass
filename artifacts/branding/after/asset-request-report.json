@@ -1,0 +1,77 @@
+[
+  {
+    "path": "/favicon.ico",
+    "status": 200,
+    "contentType": "image/x-icon",
+    "bytes": 7044,
+    "format": "ICO",
+    "dimensions": [48, 48],
+    "frames": [
+      [16, 16],
+      [24, 24],
+      [32, 32],
+      [48, 48]
+    ]
+  },
+  {
+    "path": "/icon.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 34530,
+    "format": "PNG",
+    "dimensions": [512, 512]
+  },
+  {
+    "path": "/apple-icon.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 14257,
+    "format": "PNG",
+    "dimensions": [180, 180]
+  },
+  {
+    "path": "/brand/boilercompass-icon-192.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 15317,
+    "format": "PNG",
+    "dimensions": [192, 192]
+  },
+  {
+    "path": "/brand/boilercompass-icon-512.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 16117,
+    "format": "PNG",
+    "dimensions": [512, 512]
+  },
+  {
+    "path": "/manifest.webmanifest",
+    "status": 200,
+    "contentType": "application/manifest+json",
+    "bytes": 491,
+    "name": "BoilerCompass",
+    "icons": [
+      {
+        "src": "/brand/boilercompass-icon-192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "/brand/boilercompass-icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ]
+  },
+  {
+    "path": "/opengraph-image",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 73880,
+    "format": "PNG",
+    "dimensions": [1200, 630]
+  }
+]

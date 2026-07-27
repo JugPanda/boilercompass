@@ -85,6 +85,36 @@ test("first viewport explains the product, trust status, search path, and suppor
   ).toBeVisible();
 });
 
+test("homepage task cards open complete, non-empty category views", async ({
+  page,
+}) => {
+  const tasks = [
+    ["Plan classes", "Classes & academics"],
+    ["Meet with an advisor", "Advising & degree planning"],
+    ["Find study support", "Study & course tools"],
+    ["Careers and organizations", "Careers & involvement"],
+    ["Health and support", "Health, support & safety"],
+    ["Money and billing", "Money & administration"],
+    ["Campus life and transportation", "Campus life & logistics"],
+  ] as const;
+
+  await page.goto("/");
+
+  for (const [title, category] of tasks) {
+    const href = `/resources?category=${encodeURIComponent(category)}`;
+    await expect(
+      page.getByRole("link", { name: new RegExp(`^${title}`) }),
+    ).toHaveAttribute("href", href);
+
+    await page.goto(href);
+    await expect(page.getByLabel("Category")).toHaveValue(category);
+    await expect(
+      page.getByTestId("resource-results").getByRole("article").first(),
+    ).toBeVisible();
+    await page.goto("/");
+  }
+});
+
 test("resource cards name internal and external destinations and explain trust", async ({
   page,
 }) => {

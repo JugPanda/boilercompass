@@ -14,6 +14,9 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "check:links": "tsx scripts/check-links.ts",
+    "brand:generate": "python scripts/generate-brand-assets.py",
+    "brand:verify": "python scripts/verify-brand-assets.py",
+    "brand:capture": "tsx scripts/capture-brand-artifacts.ts",
     "screenshots": "tsx scripts/capture-screenshots.ts",
     "capture:upgrade": "tsx scripts/capture-upgrade-artifacts.ts",
     "capture:novice": "tsx scripts/capture-novice-artifacts.ts"

@@ -1,0 +1,94 @@
+[
+  {
+    "case": "home-desktop-light",
+    "viewport": "1440x1000",
+    "brandVisible": true,
+    "symbolSize": {
+      "width": 24,
+      "height": 24
+    },
+    "searchBottom": 635,
+    "searchAboveFold": true,
+    "routeCardReady": true,
+    "routeCardState": {
+      "width": 400,
+      "height": 378,
+      "opacity": "1",
+      "display": "block",
+      "transform": "none"
+    },
+    "horizontalOverflow": false,
+    "theme": "light",
+    "consoleErrors": [],
+    "failedRequests": []
+  },
+  {
+    "case": "home-desktop-dark",
+    "viewport": "1440x1000",
+    "brandVisible": true,
+    "symbolSize": {
+      "width": 24,
+      "height": 24
+    },
+    "searchBottom": 635,
+    "searchAboveFold": true,
+    "routeCardReady": true,
+    "routeCardState": {
+      "width": 400,
+      "height": 378,
+      "opacity": "1",
+      "display": "block",
+      "transform": "none"
+    },
+    "horizontalOverflow": false,
+    "theme": "dark",
+    "consoleErrors": [],
+    "failedRequests": []
+  },
+  {
+    "case": "home-mobile-light",
+    "viewport": "375x812",
+    "brandVisible": true,
+    "symbolSize": {
+      "width": 24,
+      "height": 24
+    },
+    "searchBottom": 519,
+    "searchAboveFold": true,
+    "routeCardReady": false,
+    "routeCardState": {
+      "width": 0,
+      "height": 0,
+      "opacity": "1",
+      "display": "none",
+      "transform": "none"
+    },
+    "horizontalOverflow": false,
+    "theme": "light",
+    "consoleErrors": [],
+    "failedRequests": []
+  },
+  {
+    "case": "home-mobile-dark",
+    "viewport": "375x812",
+    "brandVisible": true,
+    "symbolSize": {
+      "width": 24,
+      "height": 24
+    },
+    "searchBottom": 519,
+    "searchAboveFold": true,
+    "routeCardReady": false,
+    "routeCardState": {
+      "width": 0,
+      "height": 0,
+      "opacity": "1",
+      "display": "none",
+      "transform": "none"
+    },
+    "horizontalOverflow": false,
+    "theme": "dark",
+    "consoleErrors": [],
+    "failedRequests": []
+  }
+]

@@ -25,7 +25,7 @@ test("open search launcher has no material axe violations", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.keyboard.press("Control+K");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(
     page.getByRole("dialog", { name: /Where do you need to go/i }),
   ).toBeVisible();

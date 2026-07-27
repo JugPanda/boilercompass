@@ -163,18 +163,19 @@ main {
   gap: 0.65rem;
 }
 .brand-icon {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--gold);
-  border: 1px solid var(--gold);
+  color: #cfb991;
+  background: #11100e;
+  border: 1px solid #cfb991;
   border-radius: 10px;
-  transform: rotate(-8deg);
 }
 .brand-icon svg {
-  transform: rotate(8deg);
+  width: 24px;
+  height: 24px;
 }
 .desktop-nav {
   display: flex;
@@ -543,54 +544,51 @@ p {
   gap: 0.65rem;
   margin-top: 1rem;
 }
-.hero-map {
+.hero-route-motif {
   position: absolute;
   inset: 0;
-  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  color: var(--gold);
+  opacity: 0.38;
   pointer-events: none;
+  overflow: visible;
 }
-.ring {
-  position: absolute;
-  border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
-  border-radius: 50%;
+.motif-bearing,
+.motif-route,
+.motif-bearing-line,
+.motif-cardinal {
+  fill: none;
+  vector-effect: non-scaling-stroke;
 }
-.ring-one {
-  width: 600px;
-  height: 600px;
-  right: -170px;
-  top: -80px;
+.motif-bearing {
+  stroke: color-mix(in srgb, currentColor 48%, transparent);
+  stroke-width: 1.2;
 }
-.ring-two {
-  width: 360px;
-  height: 360px;
-  right: -40px;
-  top: 45px;
+.motif-bearing-inner {
+  stroke: color-mix(in srgb, currentColor 70%, transparent);
 }
-.route-line {
-  position: absolute;
-  width: 52%;
-  height: 180px;
-  border-top: 1px dashed var(--gold);
-  border-radius: 50%;
-  left: 22%;
-  top: 58%;
-  transform: rotate(-8deg);
+.motif-route {
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-dasharray: 5 7;
+  stroke-linecap: round;
 }
-.map-point {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 0 7px color-mix(in srgb, var(--gold) 18%, transparent);
+.motif-bearing-line,
+.motif-cardinal {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-.point-one {
-  left: 32%;
-  top: 54%;
+.motif-node {
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
 }
-.point-two {
-  right: 22%;
-  top: 44%;
+.motif-destination {
+  fill: currentColor;
 }
 .global-search-wrap {
   max-width: 760px;
@@ -2175,9 +2173,16 @@ kbd {
   .hero-copy h1 {
     font-size: clamp(2.55rem, 11vw, 3.4rem);
   }
-  .ring-one,
-  .ring-two {
-    display: none;
+  .hero-route-motif {
+    width: 145%;
+    left: -22%;
+    opacity: 0.28;
+  }
+  .motif-bearing,
+  .motif-bearing-line,
+  .motif-cardinal,
+  .motif-destination {
+    opacity: 0;
   }
   .route-card {
     margin: 1rem 0.3rem 0 0;

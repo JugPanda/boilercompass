@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 48" role="img" aria-labelledby="title desc">
+  <title id="title">BoilerCompass</title>
+  <desc id="desc">BoilerCompass route-bearing mark with wordmark.</desc>
+  <rect x="1" y="1" width="46" height="46" rx="11" fill="#11100e" stroke="#cfb991" stroke-width="1.5"/>
+  <g transform="translate(8 8)" fill="none" stroke="#cfb991" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 28V4h8.5c5 0 8 2.3 8 6 0 3.1-2.2 5.2-6.2 5.8H6m9.5 0c6 0 9.5 2.2 9.5 6.1 0 4-3.4 6.1-9.6 6.1H6" stroke-width="2.35"/>
+    <path d="M15 22 27 4" stroke-width="1.9"/>
+    <circle cx="6" cy="28" r="2" fill="#cfb991" stroke="none"/>
+    <circle cx="27" cy="4" r="2" fill="#cfb991" stroke="none"/>
+  </g>
+  <text x="60" y="32" fill="#17140f" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">BoilerCompass</text>
+</svg>

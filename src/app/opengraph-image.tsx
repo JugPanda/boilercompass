@@ -1,6 +1,8 @@
 import { ImageResponse } from "next/og";
+import { BoilerCompassLogo } from "@/components/boilercompass-logo";
 
-export const alt = "BoilerCompass — your guide to Purdue, all in one place";
+export const alt =
+  "BoilerCompass — your guide to Purdue, all in one place. Unofficial student resource guide.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -11,100 +13,127 @@ export default function OpenGraphImage() {
         width: "100%",
         height: "100%",
         display: "flex",
-        background: "#11100e",
-        color: "#f8f4ea",
-        position: "relative",
-        padding: "74px",
-        fontFamily: "sans-serif",
         flexDirection: "column",
         justifyContent: "space-between",
+        position: "relative",
         overflow: "hidden",
+        padding: "68px 72px 62px",
+        background: "#11100e",
+        color: "#f8f4ea",
+        fontFamily: "Arial, Helvetica, sans-serif",
       }}
     >
-      <div
+      <svg
+        width="570"
+        height="570"
+        viewBox="0 0 570 570"
         style={{
           position: "absolute",
-          width: 520,
-          height: 520,
-          border: "1px solid #5b5144",
-          borderRadius: 999,
-          right: -110,
-          top: 50,
-          display: "flex",
+          right: -42,
+          top: 24,
+          opacity: 0.72,
         }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          width: 340,
-          height: 340,
-          border: "1px solid #cfb991",
-          borderRadius: 999,
-          right: -20,
-          top: 140,
-          display: "flex",
-        }}
-      />
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 18,
-          fontSize: 34,
-          fontWeight: 700,
-        }}
+        aria-hidden="true"
       >
-        <div
-          style={{
-            width: 54,
-            height: 54,
-            borderRadius: 14,
-            border: "2px solid #cfb991",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#cfb991",
-          }}
-        >
-          C
-        </div>
-        BoilerCompass
-      </div>
+        <circle
+          cx="330"
+          cy="285"
+          r="226"
+          fill="none"
+          stroke="#5b5144"
+          strokeWidth="2"
+        />
+        <circle
+          cx="330"
+          cy="285"
+          r="146"
+          fill="none"
+          stroke="#cfb991"
+          strokeWidth="2"
+        />
+        <path
+          d="M36 430c92-80 157-18 228-82 58-53 57-132 146-150"
+          fill="none"
+          stroke="#cfb991"
+          strokeWidth="3"
+          strokeDasharray="10 12"
+          strokeLinecap="round"
+        />
+        <path
+          d="m382 224 40-48"
+          fill="none"
+          stroke="#cfb991"
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        <circle
+          cx="264"
+          cy="348"
+          r="8"
+          fill="#11100e"
+          stroke="#cfb991"
+          strokeWidth="4"
+        />
+        <circle cx="422" cy="176" r="10" fill="#cfb991" />
+      </svg>
+
+      <BoilerCompassLogo markSize={58} />
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: 16,
+          gap: 18,
           maxWidth: 790,
+          position: "relative",
         }}
       >
         <div
           style={{
+            display: "flex",
+            alignItems: "center",
+            alignSelf: "flex-start",
+            minHeight: 38,
+            padding: "0 16px",
+            border: "1px solid #5b5144",
+            borderRadius: 999,
             color: "#cfb991",
-            fontSize: 23,
+            fontSize: 20,
+            fontWeight: 700,
+            letterSpacing: 3.4,
             textTransform: "uppercase",
-            letterSpacing: 5,
           }}
         >
           Unofficial student resource guide
         </div>
         <div
           style={{
-            fontSize: 72,
-            lineHeight: 1.02,
+            display: "flex",
+            maxWidth: 790,
+            fontSize: 68,
             fontWeight: 760,
-            letterSpacing: -3,
+            letterSpacing: -3.4,
+            lineHeight: 1.03,
           }}
         >
           Your guide to Purdue, all in one place.
         </div>
       </div>
-      <div style={{ display: "flex", gap: 18, color: "#bdb5a8", fontSize: 22 }}>
-        <span>Trusted source labels</span>
-        <span>•</span>
-        <span>Guided tasks</span>
-        <span>•</span>
-        <span>Campus/location</span>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          color: "#bdb5a8",
+          fontSize: 20,
+        }}
+      >
+        <span>Find the right door</span>
+        <span style={{ width: 30, height: 1, background: "#5b5144" }} />
+        <span>Check the source</span>
+        <span style={{ width: 30, height: 1, background: "#5b5144" }} />
+        <span>Prepare before you go</span>
       </div>
     </div>,
     size,
