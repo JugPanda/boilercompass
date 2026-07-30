@@ -24,7 +24,7 @@ async function check(
       signal: controller.signal,
       headers: {
         "user-agent":
-          "BoilerCompass-LinkChecker/1.0 (+https://purdueboilercompass.vercel.app)",
+          "BoilerCompass-LinkChecker/1.0 (+https://boilercompass.com)",
       },
     });
     if (response.status === 405 || response.status === 501)
@@ -34,7 +34,7 @@ async function check(
         signal: controller.signal,
         headers: {
           "user-agent":
-            "BoilerCompass-LinkChecker/1.0 (+https://purdueboilercompass.vercel.app)",
+            "BoilerCompass-LinkChecker/1.0 (+https://boilercompass.com)",
           range: "bytes=0-1024",
         },
       });

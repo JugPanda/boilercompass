@@ -17,6 +17,7 @@
     "brand:generate": "python scripts/generate-brand-assets.py",
     "brand:verify": "python scripts/verify-brand-assets.py",
     "brand:capture": "tsx scripts/capture-brand-artifacts.ts",
+    "preview:capture": "tsx scripts/capture-project-preview.ts",
     "screenshots": "tsx scripts/capture-screenshots.ts",
     "capture:upgrade": "tsx scripts/capture-upgrade-artifacts.ts",
     "capture:novice": "tsx scripts/capture-novice-artifacts.ts"
@@ -43,6 +44,7 @@
     "eslint-config-next": "16.2.11",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.23.1",
     "typescript": "^5",

@@ -1,0 +1,120 @@
+{
+  "source": "http://127.0.0.1:3137",
+  "viewport": { "width": 1600, "height": 1000 },
+  "scrollY": 115,
+  "selectedTheme": "light",
+  "light": {
+    "metrics": {
+      "title": "BoilerCompass — Your guide to Purdue",
+      "heading": "Find the right Purdue resource.",
+      "scrollY": 115,
+      "logo": {
+        "top": 16,
+        "right": 370,
+        "bottom": 52,
+        "left": 210,
+        "width": 160,
+        "height": 36
+      },
+      "headingRect": {
+        "top": 100,
+        "right": 910,
+        "bottom": 279,
+        "left": 210,
+        "width": 700,
+        "height": 180
+      },
+      "search": {
+        "top": 391,
+        "right": 910,
+        "bottom": 520,
+        "left": 210,
+        "width": 700,
+        "height": 129
+      },
+      "routeCard": {
+        "top": 137,
+        "right": 1390,
+        "bottom": 515,
+        "left": 990,
+        "width": 400,
+        "height": 378
+      },
+      "resourceCards": [73, 73, 73, 73],
+      "horizontalOverflow": false,
+      "theme": "light"
+    },
+    "consoleErrors": [],
+    "failedRequests": []
+  },
+  "dark": {
+    "metrics": {
+      "title": "BoilerCompass — Your guide to Purdue",
+      "heading": "Find the right Purdue resource.",
+      "scrollY": 115,
+      "logo": {
+        "top": 16,
+        "right": 370,
+        "bottom": 52,
+        "left": 210,
+        "width": 160,
+        "height": 36
+      },
+      "headingRect": {
+        "top": 100,
+        "right": 910,
+        "bottom": 279,
+        "left": 210,
+        "width": 700,
+        "height": 180
+      },
+      "search": {
+        "top": 391,
+        "right": 910,
+        "bottom": 520,
+        "left": 210,
+        "width": 700,
+        "height": 129
+      },
+      "routeCard": {
+        "top": 137,
+        "right": 1390,
+        "bottom": 515,
+        "left": 990,
+        "width": 400,
+        "height": 378
+      },
+      "resourceCards": [73, 73, 73, 73],
+      "horizontalOverflow": false,
+      "theme": "dark"
+    },
+    "consoleErrors": [],
+    "failedRequests": []
+  },
+  "outputs": {
+    "png": {
+      "format": "png",
+      "width": 1600,
+      "height": 1000,
+      "hasAlpha": false,
+      "bytes": 187206,
+      "sha256": "3fe29f923c1234dbfed7dc471e96e3fa2541db619161db13052e996a63fbfa6a"
+    },
+    "webp": {
+      "format": "webp",
+      "width": 1600,
+      "height": 1000,
+      "hasAlpha": false,
+      "bytes": 72974,
+      "sha256": "1d9bc4e5d0e79e0e873c1885bc2942156e81ce0c54b84209ab70f074e320df8d"
+    },
+    "thumbnail": {
+      "format": "png",
+      "width": 400,
+      "height": 250,
+      "hasAlpha": false,
+      "bytes": 50733,
+      "sha256": "3da340fd27d30ffc04d38b18ce23f1cba84090cc80e8b160d579094a675b3185"
+    }
+  }
+}

@@ -14,7 +14,7 @@ import { ResourceCard } from "@/components/resource-card";
 import { ResourceLaunchButton } from "@/components/resource-launch-button";
 import { resourceById, resourceRegistry } from "@/data/resources";
 import { audienceLabel } from "@/lib/resource-search";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, socialImage } from "@/lib/site";
 
 export function generateStaticParams() {
   return resourceRegistry.map(({ id }) => ({ id }));
@@ -36,6 +36,7 @@ export async function generateMetadata({
       title: `${resource.name} | BoilerCompass`,
       description: resource.shortDescription,
       url: `/resources/${id}`,
+      images: [socialImage.url],
     },
   };
 }

@@ -31,12 +31,23 @@ Open <http://localhost:3000>.
 ### Environment variables
 
 ```dotenv
-NEXT_PUBLIC_SITE_URL=https://purdueboilercompass.vercel.app
 NEXT_PUBLIC_CORRECTIONS_URL=https://github.com/JugPanda/boilercompass/issues/new
 ```
 
-- `NEXT_PUBLIC_SITE_URL` controls canonical, Open Graph, sitemap, and robots URLs. Change it when a custom domain is adopted.
+- The production domain is defined centrally as `https://boilercompass.com` in [`src/lib/site.ts`](src/lib/site.ts). Canonical, Open Graph, sitemap, and robots URLs all derive from it.
 - `NEXT_PUBLIC_CORRECTIONS_URL` must be a real public issue or correction-form destination. Query parameters are added to prefill the affected resource and a correction template.
+
+### Project preview assets
+
+The portfolio-ready project preview is generated from a real production-mode browser render:
+
+```bash
+npm run build
+npm run start -- --hostname 127.0.0.1 --port 3137
+BASE_URL=http://127.0.0.1:3137 npm run preview:capture
+```
+
+The command writes `1600×1000` PNG and WebP files to `public/brand/boilercompass-project-preview.*`, plus light, dark, and 400-pixel QA artifacts under `artifacts/project-preview/`. The dynamic `1200×630` Open Graph image remains the social-sharing image.
 
 ## Editing resources
 
@@ -93,12 +104,11 @@ Then inspect `/`, `/resources`, a resource detail route, a guide, `/support`, `/
 
 1. Import the repository into Vercel or run `vercel` from this directory.
 2. Prefer the project slug `boilercompass`; if unavailable, try `boilercompass-purdue`, then `boilercompass-app`.
-3. Add `NEXT_PUBLIC_SITE_URL` with the final production hostname.
-4. Add a working `NEXT_PUBLIC_CORRECTIONS_URL`.
-5. Deploy production and smoke-test the deployed URL—not only the successful deployment status.
-6. Verify rendered canonical/OG metadata and fetch the live sitemap and robots files.
+3. Add a working `NEXT_PUBLIC_CORRECTIONS_URL`.
+4. Deploy production and smoke-test the deployed URL—not only the successful deployment status.
+5. Verify rendered canonical/OG metadata and fetch the live sitemap and robots files.
 
-For a future custom domain, change `NEXT_PUBLIC_SITE_URL`, redeploy, and re-check canonical, Open Graph, sitemap, and robots URLs together.
+If the production domain changes, update `src/lib/site.ts`, redeploy, and re-check canonical, Open Graph, sitemap, and robots URLs together.
 
 ## Privacy and safety
 

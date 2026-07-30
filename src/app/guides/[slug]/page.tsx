@@ -6,6 +6,7 @@ import { GuideToc } from "@/components/guide-toc";
 import { ResourceCard } from "@/components/resource-card";
 import { guideBySlug, guides } from "@/data/guides";
 import { resourceRegistry } from "@/data/resources";
+import { socialImage } from "@/lib/site";
 
 export function generateStaticParams() {
   return guides.map(({ slug }) => ({ slug }));
@@ -26,6 +27,7 @@ export async function generateMetadata({
           title: `${guide.title} | BoilerCompass`,
           description: guide.summary,
           url: `/guides/${slug}`,
+          images: [socialImage.url],
         },
       }
     : {};

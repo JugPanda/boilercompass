@@ -4,7 +4,7 @@ import { SearchLauncherProvider } from "@/components/search-launcher";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { absoluteUrl, siteConfig } from "@/lib/site";
+import { siteConfig, socialImage } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,20 +22,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: "BoilerCompass — Your guide to Purdue",
     description: siteConfig.description,
-    images: [
-      {
-        url: absoluteUrl("/opengraph-image"),
-        width: 1200,
-        height: 630,
-        alt: "BoilerCompass — an unofficial Purdue student resource guide",
-      },
-    ],
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "BoilerCompass — Your guide to Purdue",
     description: siteConfig.description,
-    images: [absoluteUrl("/opengraph-image")],
+    images: [socialImage.url],
   },
 };
 
