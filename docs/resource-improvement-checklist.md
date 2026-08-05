@@ -55,7 +55,7 @@ Acceptance criteria:
 - [x] Add browser task tests for Pell, first-year parking, and laundry cost.
 - [x] Run formatting, lint, TypeScript checks, unit tests, production build, Playwright desktop tests, and responsive smoke tests.
 - [x] Validate every newly added official destination and every generated internal route.
-- [ ] Commit, push, and verify the deployed production routes.
+- [x] Commit, push, and verify the deployed production routes.
 
 ## Official sources reviewed
 
