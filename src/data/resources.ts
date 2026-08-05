@@ -45,6 +45,11 @@ export const resourceSchema = z.object({
   featured: z.boolean(),
   aliases: z.array(z.string()),
   lastVerified: z.iso.date(),
+  contentReviewed: z.iso.date().optional(),
+  useWhen: z.array(z.string()).optional(),
+  notFor: z.array(z.string()).optional(),
+  beforeOpening: z.array(z.string()).optional(),
+  guideSlugs: z.array(z.string()).optional(),
   caution: z.string().optional(),
   officialAlternativeIds: z.array(z.string()).optional(),
 });
@@ -57,6 +62,7 @@ export type Audience = Resource["audiences"][number];
 export type ResourceCategory = Resource["category"];
 
 const V = "2026-07-25";
+const CURRENT = "2026-08-05";
 const ALL = ["west_lafayette", "indianapolis", "online"] as const;
 const STUDENTS = ["all_students", "undergraduate", "graduate"] as const;
 
@@ -810,8 +816,30 @@ const records: Resource[] = [
     audiences: [...STUDENTS, "prospective"],
     requiresLogin: false,
     featured: true,
-    aliases: ["dfa", "fafsa", "aid", "scholarship"],
-    lastVerified: V,
+    aliases: [
+      "dfa",
+      "fafsa",
+      "aid",
+      "scholarship",
+      "pell grant",
+      "pell grant scholarship",
+      "financial aid offer",
+      "did i get pell",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need FAFSA, grant, scholarship, loan, cost, or aid-offer guidance.",
+      "You need to check outstanding financial-aid requirements or messages.",
+    ],
+    notFor: [
+      "Paying a Purdue invoice or resolving an ordinary billing transaction; start with the Office of the Bursar.",
+    ],
+    beforeOpening: [
+      "For personal awards, open myPurdue and select the correct aid year.",
+      "Do not send passwords, Social Security numbers, tax documents, or student records through BoilerCompass.",
+    ],
+    guideSlugs: ["understanding-financial-aid-offer"],
     caution:
       "Aid rules, costs, deadlines, and eligibility change. Use current official guidance for your situation.",
   }),
@@ -874,6 +902,146 @@ const records: Resource[] = [
     lastVerified: V,
   }),
   r({
+    id: "purdue-it-new-students",
+    name: "Purdue IT — New to Purdue",
+    shortDescription:
+      "Set up your career account, Microsoft MFA, email, Wi-Fi, and ResNet.",
+    longDescription:
+      "Purdue IT’s official new-student page explains career-account activation, Microsoft multi-factor authentication, Purdue email, campus Wi-Fi, residence-hall internet, software, printing, and technology support.",
+    url: "https://it.purdue.edu/services/new-to-purdue.php",
+    category: "Core portals",
+    tags: [
+      "career account",
+      "Microsoft MFA",
+      "email",
+      "Wi-Fi",
+      "ResNet",
+      "technology",
+    ],
+    sourceType: "official",
+    campuses: [...ALL],
+    audiences: [...STUDENTS, "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "new to purdue it",
+      "career account",
+      "microsoft authenticator",
+      "mfa",
+      "purdue email",
+      "outlook",
+      "wifi",
+      "wi-fi",
+      "how do i get on wifi",
+      "eduroam",
+      "resnet",
+      "urhome",
+      "internet",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You are activating your Purdue account or setting up Microsoft MFA and email.",
+      "You need official Wi-Fi, ResNet, URHome, printing, software, or IT support instructions.",
+    ],
+    notFor: [
+      "Entering a Purdue password on BoilerCompass; BoilerCompass never collects Purdue credentials.",
+      "Assuming West Lafayette ResNet or URHome instructions apply to Indianapolis or private housing; network guidance varies by campus and residence.",
+    ],
+    beforeOpening: [
+      "New students may need their Purdue ID number and account-setup password.",
+      "Use Purdue’s current Microsoft Authenticator MFA instructions rather than older third-party setup guides.",
+    ],
+    guideSlugs: ["new-student-essentials"],
+    caution:
+      "Security and account-setup instructions can change. Follow Purdue IT’s current page and contact the Purdue IT Service Desk if identity verification is required.",
+  }),
+  r({
+    id: "mobile-id-card",
+    name: "Purdue Mobile ID & Card Operations",
+    shortDescription:
+      "Set up or troubleshoot Purdue Mobile ID, eAccounts, and card services.",
+    longDescription:
+      "Purdue ID Card Operations publishes official Mobile ID setup, photo submission, eAccounts, Purdue ID, and support information for card and access problems.",
+    url: "https://www.purdue.edu/treasurer/finance/card/",
+    category: "Money & administration",
+    tags: ["mobile ID", "student ID", "eAccounts", "BoilerExpress", "card"],
+    sourceType: "official",
+    campuses: ["west_lafayette", "all_or_verify"],
+    audiences: [...STUDENTS, "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "student id",
+      "purdue id",
+      "mobile id",
+      "id card",
+      "eaccounts",
+      "boilerexpress",
+      "meal swipe",
+      "door access",
+      "my id won't work",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need to submit an ID photo, set up Mobile ID, open eAccounts, or troubleshoot card access.",
+      "You need the official starting point for BoilerExpress or Purdue ID questions.",
+    ],
+    notFor: [
+      "Current dining menus or meal-plan selection; use Purdue Dining for those tasks.",
+    ],
+    beforeOpening: [
+      "Use the official eAccounts and Mobile ID links supplied by Purdue Card Operations.",
+    ],
+    guideSlugs: ["new-student-essentials"],
+    caution:
+      "Mobile ID availability, device support, physical-card exceptions, meal plans, and account balances are separate issues. Follow the current official instructions for your campus and device.",
+  }),
+  r({
+    id: "academic-calendars",
+    name: "Academic & registration calendars",
+    shortDescription:
+      "Check current academic dates, add/drop calendars, and registration timing.",
+    longDescription:
+      "The Office of the Registrar publishes current academic calendars, add/drop and refund calendars, short-course dates, and registration time-ticket information.",
+    url: "https://www.purdue.edu/registrar/calendars/",
+    category: "Classes & academics",
+    tags: ["academic calendar", "add drop", "refund", "registration", "finals"],
+    sourceType: "official",
+    campuses: ["west_lafayette", "indianapolis", "statewide"],
+    audiences: [...STUDENTS, "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "academic calendar",
+      "registration calendar",
+      "drop deadline",
+      "add deadline",
+      "withdraw deadline",
+      "refund deadline",
+      "fall break",
+      "when is fall break",
+      "spring break",
+      "final exams",
+      "time ticket",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need the current academic calendar, registration time-ticket groups, or add/drop and refund deadlines.",
+    ],
+    notFor: [
+      "Assuming one calendar applies to every campus or short course without checking the page label.",
+    ],
+    beforeOpening: [
+      "Confirm the campus, term, and course length before relying on a date.",
+    ],
+    guideSlugs: ["new-student-essentials"],
+    caution:
+      "Purdue states that calendars are subject to change without notice. Short courses and different locations may use different deadlines.",
+  }),
+  r({
     id: "dining",
     name: "Purdue Dining & Culinary",
     shortDescription:
@@ -910,6 +1078,138 @@ const records: Resource[] = [
     lastVerified: V,
     caution:
       "Housing options, availability, and contract terms change. Use the current official site.",
+  }),
+  r({
+    id: "residence-laundry",
+    name: "University Residences laundry",
+    shortDescription:
+      "Check residence-hall laundry locations, current fees, and CSCPay instructions.",
+    longDescription:
+      "University Residences publishes current laundry-machine access, payment, location, refund, and fee information for West Lafayette residence halls and Boiler Apartments.",
+    url: "https://www.housing.purdue.edu/my-housing/info/amenities-accommodations/laundry.html",
+    category: "Campus life & logistics",
+    tags: ["laundry", "washer", "dryer", "CSCPay", "residence hall"],
+    sourceType: "official",
+    campuses: ["west_lafayette"],
+    audiences: ["undergraduate", "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "laundry",
+      "wash clothes",
+      "washer",
+      "dryer",
+      "cscpay",
+      "laundry cost",
+      "how much is laundry",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need to know whether your University Residences location charges for laundry.",
+      "You need CSCPay, alternative-payment, added dryer time, or refund instructions.",
+    ],
+    notFor: [
+      "Privately operated apartments or Indianapolis housing unless their own housing office confirms the same rules.",
+    ],
+    beforeOpening: [
+      "Know your assigned residence because some locations include laundry in the room rate.",
+    ],
+    guideSlugs: ["laundry-in-university-residences", "new-student-essentials"],
+    caution:
+      "Fees and included-laundry locations can change. The official page currently lists $2.50 to wash, $2.00 to dry, and $0.25 for added dryer time at paid West Lafayette locations.",
+  }),
+  r({
+    id: "residence-mail-packages",
+    name: "Residence hall mail & packages",
+    shortDescription:
+      "Find official addressing, package pickup, delivery, and shipping instructions.",
+    longDescription:
+      "University Residences explains how to address mail and packages, wait for the hall’s pickup notification, present a Purdue ID (PUID), handle same-day deliveries, and find outbound shipping services.",
+    url: "https://www.housing.purdue.edu/my-housing/info/general/postal-service.html",
+    category: "Campus life & logistics",
+    tags: ["mail", "packages", "shipping", "Amazon", "residence hall"],
+    sourceType: "official",
+    campuses: ["west_lafayette"],
+    audiences: ["undergraduate", "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "mail",
+      "package",
+      "amazon package",
+      "how do packages work",
+      "shipping address",
+      "mailing address",
+      "front desk package",
+      "ups",
+      "fedex",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need the proper residence-hall address format or package-pickup procedure.",
+      "You need to understand same-day food or grocery delivery versus front-desk package delivery.",
+      "You need Purdue’s current package-hold or outbound-shipping guidance.",
+    ],
+    notFor: [
+      "Refrigerated medicine delivery without arranging an appropriate recipient; residence halls state that refrigerated storage is unavailable.",
+      "Leaving same-day food or grocery delivery at the front desk; the resident must receive those deliveries in person.",
+    ],
+    beforeOpening: [
+      "Use the residence-hall address list for your exact building and room, box, or apartment number.",
+      "Wait for the Purdue residence-hall pickup email rather than relying only on a carrier’s delivery notice.",
+      "Bring your PUID for pickup. The current page says packages are held for two weeks after the pickup email before return-to-sender handling.",
+      "For outbound shipping, the current page directs residents to the UPS Store in Purdue Memorial Union.",
+    ],
+    guideSlugs: ["new-student-essentials"],
+    caution:
+      "Package handling, hold times, accepted carriers, and address formats can change. Use the official page for your assigned residence.",
+  }),
+  r({
+    id: "student-parking",
+    name: "Student parking permits",
+    shortDescription:
+      "Check current student permit eligibility, costs, locations, and request dates.",
+    longDescription:
+      "Purdue Parking Operations publishes current West Lafayette rules for Value, commuter C, graduate garage, student-employee, Residence Hall, contracted-housing, FSCL, disability, and first-year exception parking.",
+    url: "https://www.purdue.edu/operations/parking/home/permits/students/",
+    category: "Campus life & logistics",
+    tags: ["parking", "car", "permit", "commuter", "residence hall"],
+    sourceType: "official",
+    campuses: ["west_lafayette"],
+    audiences: [...STUDENTS, "new_students"],
+    requiresLogin: false,
+    featured: true,
+    aliases: [
+      "parking",
+      "parking permit",
+      "bring my car",
+      "can freshmen bring cars",
+      "first year parking",
+      "residence hall permit",
+      "c permit",
+      "value permit",
+      "garage permit",
+      "where can i leave my car",
+    ],
+    lastVerified: CURRENT,
+    contentReviewed: CURRENT,
+    useWhen: [
+      "You need to determine which West Lafayette student permit you may request.",
+      "You need current permit costs, request windows, overnight rules, or parking locations.",
+    ],
+    notFor: [
+      "Indianapolis parking permits; follow that campus’s parking guidance rather than the West Lafayette permit system.",
+      "Assuming paid visitor parking is a substitute for student vehicle storage.",
+    ],
+    beforeOpening: [
+      "Know your local academic-year address, student level, housing type, and whether overnight storage is needed.",
+      "Have address or housing documentation ready when the permit type requires it.",
+    ],
+    guideSlugs: ["parking-and-bringing-a-car", "new-student-essentials"],
+    caution:
+      "First-year residence-hall students are not eligible for a normal Residence Hall permit regardless of earned credits. Limited documented exceptions and remote Value parking may apply. Availability and prices can change.",
   }),
   r({
     id: "campus-map",

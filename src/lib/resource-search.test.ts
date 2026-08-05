@@ -27,6 +27,14 @@ describe("resource search", () => {
     ["degree audit", "mypurdue"],
     ["sexual assault", "care"],
     ["food insecurity", "odos-financial"],
+    ["did i get pell", "financial-aid"],
+    ["pell grant scholarship", "financial-aid"],
+    ["can freshmen bring cars", "student-parking"],
+    ["how much is laundry", "residence-laundry"],
+    ["how do packages work", "residence-mail-packages"],
+    ["my id won't work", "mobile-id-card"],
+    ["how do i get on wifi", "purdue-it-new-students"],
+    ["when is fall break", "academic-calendars"],
   ])("maps shortcut %s to %s", (query, expectedId) => {
     expect(searchResources(resourceRegistry, query)[0]?.id).toBe(expectedId);
   });

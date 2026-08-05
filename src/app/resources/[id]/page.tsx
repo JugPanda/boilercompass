@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import {
   AlertTriangle,
   ArrowLeft,
+  BookOpenCheck,
   CalendarCheck,
+  CircleCheckBig,
+  CircleX,
+  ClipboardList,
   Flag,
   LogIn,
   Users,
@@ -12,6 +16,7 @@ import {
 import { CampusBadge, SourceBadge } from "@/components/resource-badges";
 import { ResourceCard } from "@/components/resource-card";
 import { ResourceLaunchButton } from "@/components/resource-launch-button";
+import { guideBySlug } from "@/data/guides";
 import { resourceById, resourceRegistry } from "@/data/resources";
 import { audienceLabel } from "@/lib/resource-search";
 import { siteConfig, socialImage } from "@/lib/site";
@@ -56,7 +61,13 @@ export default async function ResourceDetailPage({
     .slice(0, 3);
   const officialAlternatives = (resource.officialAlternativeIds ?? [])
     .map((alternativeId) => resourceById.get(alternativeId))
-    .filter(Boolean) as typeof resourceRegistry;
+    .filter(
+      (alternative): alternative is (typeof resourceRegistry)[number] =>
+        alternative !== undefined,
+    );
+  const linkedGuides = (resource.guideSlugs ?? [])
+    .map((guideSlug) => guideBySlug.get(guideSlug))
+    .filter((guide): guide is NonNullable<typeof guide> => guide !== undefined);
   const correctionUrl = new URL(siteConfig.correctionsUrl);
   correctionUrl.searchParams.set("title", `Correction: ${resource.name}`);
   correctionUrl.searchParams.set(
@@ -108,6 +119,64 @@ export default async function ResourceDetailPage({
               </ul>
             </section>
           )}
+          {linkedGuides.length > 0 && (
+            <section className="resource-guides">
+              <h2>
+                <BookOpenCheck size={21} /> Step-by-step guidance
+              </h2>
+              <ul>
+                {linkedGuides.map((guide) => (
+                  <li key={guide.slug}>
+                    <Link href={`/guides/${guide.slug}`}>{guide.title}</Link>
+                    <span>{guide.summary}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {(resource.useWhen || resource.notFor || resource.beforeOpening) && (
+            <section
+              className="resource-task-context"
+              aria-label="How to use this resource"
+            >
+              {resource.useWhen && (
+                <div>
+                  <h2>
+                    <CircleCheckBig size={20} /> Use this when
+                  </h2>
+                  <ul>
+                    {resource.useWhen.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {resource.notFor && (
+                <div>
+                  <h2>
+                    <CircleX size={20} /> This is not for
+                  </h2>
+                  <ul>
+                    {resource.notFor.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {resource.beforeOpening && (
+                <div>
+                  <h2>
+                    <ClipboardList size={20} /> Prepare before opening
+                  </h2>
+                  <ul>
+                    {resource.beforeOpening.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
+          )}
           <div className="detail-actions">
             <ResourceLaunchButton
               id={resource.id}
@@ -141,8 +210,31 @@ export default async function ResourceDetailPage({
                   year: "numeric",
                   timeZone: "UTC",
                 })}
+                <small className="detail-date-note">
+                  Official destination checked
+                </small>
               </dd>
             </div>
+            {resource.contentReviewed && (
+              <div>
+                <dt>
+                  <CalendarCheck size={17} /> Content reviewed
+                </dt>
+                <dd>
+                  {new Date(
+                    `${resource.contentReviewed}T12:00:00Z`,
+                  ).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                    timeZone: "UTC",
+                  })}
+                  <small className="detail-date-note">
+                    BoilerCompass guidance reviewed
+                  </small>
+                </dd>
+              </div>
+            )}
             <div>
               <dt>
                 <LogIn size={17} /> Purdue login

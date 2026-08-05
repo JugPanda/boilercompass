@@ -1699,6 +1699,74 @@ kbd {
   color: var(--gold);
   font-weight: 850;
 }
+.resource-guides {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line));
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--gold-soft) 24%, var(--surface));
+}
+.resource-guides h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 1.2rem;
+}
+.resource-guides h2 svg {
+  color: var(--gold);
+}
+.resource-guides ul {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.resource-guides li {
+  display: grid;
+  gap: 0.2rem;
+}
+.resource-guides a {
+  color: var(--gold);
+  font-weight: 850;
+}
+.resource-guides li span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.resource-task-context {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.resource-task-context > div {
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.resource-task-context h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 1.05rem;
+}
+.resource-task-context h2 svg {
+  color: var(--gold);
+  flex: 0 0 auto;
+}
+.resource-task-context ul {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.85rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+.resource-task-context li::marker {
+  color: var(--gold);
+}
 .detail-facts {
   background: var(--near-black);
   color: #f7f2e7;
@@ -1728,6 +1796,12 @@ kbd {
   margin: 0.35rem 0 0;
   font-size: 0.9rem;
   color: #d7d0c4;
+}
+.detail-date-note {
+  display: block;
+  margin-top: 0.22rem;
+  color: #a8a094;
+  font-size: 0.7rem;
 }
 .aliases {
   border-top: 1px solid #39352e;
@@ -1780,6 +1854,15 @@ kbd {
 .guide-card > p:not(.eyebrow) {
   color: var(--muted);
 }
+.guide-card-reviewed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
 .guide-card-link {
   margin-top: auto;
   color: var(--gold);
@@ -1801,7 +1884,12 @@ kbd {
   color: var(--muted);
   font-size: 1.18rem;
 }
-.guide-hero > span {
+.guide-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.2rem;
+}
+.guide-meta span {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1882,6 +1970,55 @@ kbd {
   position: absolute;
   left: 0;
   font-weight: 900;
+}
+
+.guide-sources {
+  max-width: 940px;
+  margin: 4rem auto 0;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.guide-sources h2 {
+  margin: 0.35rem 0 1rem;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+}
+.guide-sources-note {
+  max-width: 68ch;
+  margin: -0.35rem 0 1.2rem;
+  color: var(--muted);
+}
+.guide-sources ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.guide-sources a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 750;
+}
+.guide-sources a:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.guide-sources a:focus-visible {
+  border-color: var(--gold);
+}
+.guide-sources a svg {
+  flex: 0 0 auto;
 }
 
 .support-hero {
@@ -2459,6 +2596,9 @@ kbd {
     border-bottom: 1px solid var(--line);
     padding: 1rem 0;
   }
+  .guide-sources ul {
+    grid-template-columns: 1fr;
+  }
   .about-block {
     grid-template-columns: 48px 1fr;
   }
@@ -2531,6 +2671,9 @@ kbd {
   }
   .support-grid a {
     min-height: 220px;
+  }
+  .guide-sources {
+    padding: 1rem;
   }
 }
 

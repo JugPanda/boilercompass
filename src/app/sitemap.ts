@@ -4,7 +4,7 @@ import { resourceRegistry } from "@/data/resources";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = "2026-07-25";
+  const now = "2026-08-05";
   const staticRoutes = ["", "/resources", "/guides", "/about", "/support"];
   return [
     ...staticRoutes.map((route, index) => ({
@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...guides.map((guide) => ({
       url: absoluteUrl(`/guides/${guide.slug}`),
-      lastModified: now,
+      lastModified: guide.lastReviewed ?? now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),

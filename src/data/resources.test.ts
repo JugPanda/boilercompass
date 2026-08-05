@@ -14,6 +14,13 @@ const requiredIds = [
   "push",
   "boilerexams",
   "boilerclasses",
+  "student-parking",
+  "residence-laundry",
+  "residence-mail-packages",
+  "purdue-it-new-students",
+  "mobile-id-card",
+  "academic-calendars",
+  "financial-aid",
 ];
 
 describe("resource registry", () => {
@@ -54,7 +61,24 @@ describe("resource registry", () => {
       );
       expect(resource.campuses.length).toBeGreaterThan(0);
       expect(resource.audiences.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("uses valid review dates and unique resource IDs", () => {
+    const ids = resourceRegistry.map((resource) => resource.id);
+    expect(new Set(ids).size).toBe(ids.length);
+
+    for (const resource of resourceRegistry) {
       expect(resource.lastVerified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(
+        Number.isNaN(Date.parse(`${resource.lastVerified}T12:00:00Z`)),
+      ).toBe(false);
+      if (resource.contentReviewed) {
+        expect(resource.contentReviewed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(
+          Number.isNaN(Date.parse(`${resource.contentReviewed}T12:00:00Z`)),
+        ).toBe(false);
+      }
     }
   });
 });

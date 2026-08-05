@@ -7,15 +7,33 @@ function collectRuntimeErrors(page: import("@playwright/test").Page) {
   });
   page.on("pageerror", (error) => errors.push(`page: ${error.message}`));
   page.on("response", (response) => {
-    if (
-      response.url().startsWith("http://127.0.0.1:3118") &&
-      response.status() >= 400
-    ) {
+    const responseUrl = new URL(response.url());
+    const currentUrl = new URL(page.url());
+    if (responseUrl.origin === currentUrl.origin && response.status() >= 400) {
       errors.push(`http ${response.status()}: ${response.url()}`);
     }
   });
   return errors;
 }
+
+const verificationRoutes = [
+  "/",
+  "/resources",
+  "/guides",
+  "/resources/student-parking",
+  "/resources/residence-laundry",
+  "/resources/residence-mail-packages",
+  "/resources/purdue-it-new-students",
+  "/resources/mobile-id-card",
+  "/resources/academic-calendars",
+  "/resources/financial-aid",
+  "/guides/parking-and-bringing-a-car",
+  "/guides/understanding-financial-aid-offer",
+  "/guides/laundry-in-university-residences",
+  "/guides/new-student-essentials",
+  "/support",
+  "/about",
+] as const;
 
 test("keyboard launcher opens, searches an alias, selects a result, and returns focus", async ({
   page,
@@ -251,7 +269,7 @@ test("directory filters, exposes active state, resets, and persists favorites", 
 
   await page.getByRole("button", { name: "Reset" }).click();
   await expect(
-    page.getByRole("heading", { name: "49 resources" }),
+    page.getByRole("heading", { name: "55 resources" }),
   ).toBeVisible();
   await page.getByRole("button", { name: /Favorites 1/i }).click();
   await expect(boilerClassesCard).toBeVisible();
@@ -370,17 +388,9 @@ test("reduced-motion mode removes large movement and decorative loops", async ({
 test("primary routes have no horizontal overflow at required widths", async ({
   page,
 }) => {
-  const routes = [
-    "/",
-    "/resources",
-    "/resources/boilerclasses",
-    "/guides/advisor-meeting-prep",
-    "/support",
-    "/about",
-  ];
   for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of routes) {
+    for (const route of verificationRoutes) {
       await page.goto(route);
       const dimensions = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
@@ -398,15 +408,7 @@ test("primary routes stay free of console and same-origin HTTP errors", async ({
   page,
 }) => {
   const errors = collectRuntimeErrors(page);
-  for (const route of [
-    "/",
-    "/resources",
-    "/resources/boilerclasses",
-    "/guides",
-    "/guides/advisor-meeting-prep",
-    "/support",
-    "/about",
-  ]) {
+  for (const route of verificationRoutes) {
     await page.goto(route, { waitUntil: "networkidle" });
   }
   expect(errors).toEqual([]);

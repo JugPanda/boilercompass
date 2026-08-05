@@ -9,8 +9,19 @@ async function expectNoMaterialViolations(page: Page) {
   expect(material, JSON.stringify(material, null, 2)).toEqual([]);
 }
 
+const auditRoutes = [
+  "/",
+  "/resources",
+  "/resources/student-parking",
+  "/resources/residence-laundry",
+  "/resources/financial-aid",
+  "/guides/parking-and-bringing-a-car",
+  "/guides/understanding-financial-aid-offer",
+  "/guides/new-student-essentials",
+] as const;
+
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
-  for (const route of ["/", "/resources", "/guides/advisor-meeting-prep"]) {
+  for (const route of auditRoutes) {
     test(`${reducedMotion} motion has no material axe violations on ${route}`, async ({
       page,
     }) => {

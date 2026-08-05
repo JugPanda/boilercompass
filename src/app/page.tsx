@@ -53,7 +53,20 @@ const tasks: Array<{
 const featuredIds = ["mypurdue", "brightspace", "boilerconnect", "boilerlink"];
 const featured = featuredIds
   .map((id) => resourceRegistry.find((item) => item.id === id))
-  .filter(Boolean) as typeof resourceRegistry;
+  .filter(
+    (resource): resource is (typeof resourceRegistry)[number] =>
+      resource !== undefined,
+  );
+
+const featuredGuideSlugs = [
+  "parking-and-bringing-a-car",
+  "understanding-financial-aid-offer",
+  "laundry-in-university-residences",
+  "new-student-essentials",
+];
+const featuredGuides = featuredGuideSlugs
+  .map((slug) => guides.find((guide) => guide.slug === slug))
+  .filter((guide): guide is (typeof guides)[number] => guide !== undefined);
 
 export default function Home() {
   return (
@@ -185,7 +198,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="guide-stack">
-            {guides.slice(0, 4).map((guide, index) => (
+            {featuredGuides.map((guide, index) => (
               <Link key={guide.slug} href={`/guides/${guide.slug}`}>
                 <span aria-hidden="true">0{index + 1}</span>
                 <div>

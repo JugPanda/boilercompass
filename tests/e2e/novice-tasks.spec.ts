@@ -144,8 +144,8 @@ test("novice task 10: report an outdated link without opening GitHub", async ({
     name: "Report an outdated link in a new tab",
   });
   const href = await report.getAttribute("href");
-  expect(href).toBeTruthy();
-  const correction = new URL(href!);
+  if (!href) throw new Error("Correction link is missing its href");
+  const correction = new URL(href);
   expect(`${correction.origin}${correction.pathname}`).toBe(
     "https://github.com/JugPanda/boilercompass/issues/new",
   );
@@ -157,6 +157,90 @@ test("novice task 10: report an outdated link without opening GitHub", async ({
   );
   await expect(report).toHaveAttribute("target", "_blank");
   await expect(report).toHaveAttribute("rel", /noopener/);
+});
+
+test("novice task 11: check whether Pell appears in Purdue's aid offer", async ({
+  page,
+}) => {
+  await page.goto("/resources?q=did%20i%20get%20pell");
+  const card = resultCard(page, "Division of Financial Aid");
+  await expect(card).toBeVisible();
+  await card
+    .getByRole("link", { name: "About Division of Financial Aid" })
+    .click();
+  await expect(
+    page.getByRole("link", { name: "Understanding your financial-aid offer" }),
+  ).toBeVisible();
+  await page
+    .getByRole("link", { name: "Understanding your financial-aid offer" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Checking for a Federal Pell Grant" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/Pell is a federal grant rather than a scholarship/i),
+  ).toBeVisible();
+});
+
+test("novice task 12: understand first-year residence-hall parking", async ({
+  page,
+}) => {
+  await page.goto("/resources?q=can%20freshmen%20bring%20cars");
+  const card = resultCard(page, "Student parking permits");
+  await expect(card).toBeVisible();
+  await card
+    .getByRole("link", { name: "About Student parking permits" })
+    .click();
+  await expect(
+    page.getByText(
+      /not eligible for a normal Residence Hall permit regardless of earned credits/i,
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Parking and bringing a car" }),
+  ).toBeVisible();
+});
+
+test("novice task 13: find the current residence laundry cost", async ({
+  page,
+}) => {
+  await page.goto("/resources?q=how%20much%20is%20laundry");
+  const card = resultCard(page, "University Residences laundry");
+  await expect(card).toBeVisible();
+  await card
+    .getByRole("link", { name: "About University Residences laundry" })
+    .click();
+  await expect(page.getByText(/\$2.50 to wash, \$2.00 to dry/i)).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Laundry in University Residences" }),
+  ).toBeVisible();
+});
+
+test("natural-language student questions rank the intended resource first", async ({
+  page,
+}) => {
+  const cases = [
+    ["did i get pell", "Division of Financial Aid"],
+    ["pell grant scholarship", "Division of Financial Aid"],
+    ["can freshmen bring cars", "Student parking permits"],
+    ["how much is laundry", "University Residences laundry"],
+    ["how do packages work", "Residence hall mail & packages"],
+    ["my id won't work", "Purdue Mobile ID & Card Operations"],
+    ["how do i get on wifi", "Purdue IT — New to Purdue"],
+    ["when is fall break", "Academic & registration calendars"],
+  ] as const;
+
+  for (const [query, expectedName] of cases) {
+    await page.goto(`/resources?q=${encodeURIComponent(query)}`);
+    await expect(
+      page
+        .getByTestId("resource-results")
+        .getByRole("article")
+        .first()
+        .getByRole("heading", { name: expectedName, exact: true }),
+      query,
+    ).toBeVisible();
+  }
 });
 
 test("broad health query keeps the best match first", async ({ page }) => {

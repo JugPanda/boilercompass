@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertTriangle, ArrowLeft, ArrowRight, Clock3 } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  CalendarCheck,
+  Clock3,
+  ExternalLink,
+} from "lucide-react";
 import { GuideToc } from "@/components/guide-toc";
 import { ResourceCard } from "@/components/resource-card";
 import { guideBySlug, guides } from "@/data/guides";
@@ -43,7 +50,10 @@ export default async function GuidePage({
   if (!guide) notFound();
   const resources = guide.resourceIds
     .map((id) => resourceRegistry.find((resource) => resource.id === id))
-    .filter(Boolean) as typeof resourceRegistry;
+    .filter(
+      (resource): resource is (typeof resourceRegistry)[number] =>
+        resource !== undefined,
+    );
   return (
     <div className="page-shell guide-detail">
       <Link className="back-link" href="/guides">
@@ -53,9 +63,25 @@ export default async function GuidePage({
         <p className="eyebrow">{guide.eyebrow}</p>
         <h1>{guide.title}</h1>
         <p>{guide.summary}</p>
-        <span>
-          <Clock3 size={16} /> {guide.readTime} read
-        </span>
+        <div className="guide-meta">
+          <span>
+            <Clock3 size={16} /> {guide.readTime} read
+          </span>
+          {guide.lastReviewed && (
+            <span>
+              <CalendarCheck size={16} /> Reviewed{" "}
+              {new Date(`${guide.lastReviewed}T12:00:00Z`).toLocaleDateString(
+                "en-US",
+                {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  timeZone: "UTC",
+                },
+              )}
+            </span>
+          )}
+        </div>
       </header>
       <div className="guide-body">
         <GuideToc headings={guide.sections.map((section) => section.heading)} />
@@ -85,6 +111,29 @@ export default async function GuidePage({
           </div>
         </article>
       </div>
+      {guide.sources && guide.sources.length > 0 && (
+        <section
+          className="guide-sources"
+          aria-labelledby="guide-sources-title"
+        >
+          <p className="eyebrow">Direct citations</p>
+          <h2 id="guide-sources-title">Official references reviewed</h2>
+          <p className="guide-sources-note">
+            BoilerCompass provides the plain-language guidance above. These
+            Purdue pages are the controlling sources for current details.
+          </p>
+          <ul>
+            {guide.sources.map((source) => (
+              <li key={source.url}>
+                <a href={source.url} target="_blank" rel="noopener noreferrer">
+                  {source.label} <ExternalLink size={15} aria-hidden="true" />
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className="related-section">
         <div className="section-heading split-heading">
           <div>

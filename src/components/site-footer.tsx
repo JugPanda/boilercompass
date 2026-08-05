@@ -29,7 +29,7 @@ export function SiteFooter() {
           names and third-party service names belong to their respective owners.
         </p>
         <div className="footer-meta">
-          <span>Updated July 2026</span>
+          <span>Updated August 2026</span>
           <p className="footer-credit">
             Built by{" "}
             <a

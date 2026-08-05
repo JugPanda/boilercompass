@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpenCheck } from "lucide-react";
+import { ArrowRight, BookOpenCheck, CalendarCheck } from "lucide-react";
 import { guides } from "@/data/guides";
 
 export const metadata: Metadata = {
   title: "Student guides",
   description:
-    "Plain-language Purdue student guides for advising, changing a major or location, course planning, academic help, and new-student essentials.",
+    "Plain-language Purdue student guides for parking, financial aid, laundry, advising, degree planning, academic help, and new-student essentials.",
   alternates: { canonical: "/guides" },
 };
 
@@ -38,6 +38,20 @@ export default function GuidesPage() {
             <p className="eyebrow">{guide.eyebrow}</p>
             <h2>{guide.title}</h2>
             <p>{guide.summary}</p>
+            {guide.lastReviewed && (
+              <span className="guide-card-reviewed">
+                <CalendarCheck size={15} aria-hidden="true" /> Reviewed{" "}
+                {new Date(`${guide.lastReviewed}T12:00:00Z`).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    timeZone: "UTC",
+                  },
+                )}
+              </span>
+            )}
             <span className="guide-card-link">
               Read guide <ArrowRight size={17} />
             </span>

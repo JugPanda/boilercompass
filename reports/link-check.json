@@ -1,10 +1,19 @@
 {
-  "checkedAt": "2026-07-27T04:07:42.350Z",
+  "checkedAt": "2026-08-05T04:55:37.234Z",
   "summary": {
-    "ok": 47,
+    "ok": 53,
     "auth_or_blocked": 2
   },
   "results": [
+    {
+      "id": "academic-calendars",
+      "name": "Academic & registration calendars",
+      "url": "https://www.purdue.edu/registrar/calendars/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/registrar/calendars/",
+      "redirected": false,
+      "classification": "ok"
+    },
     {
       "id": "academic-success",
       "name": "Academic Success Center",
@@ -314,6 +323,15 @@
       "classification": "ok"
     },
     {
+      "id": "purdue-it-new-students",
+      "name": "Purdue IT — New to Purdue",
+      "url": "https://it.purdue.edu/services/new-to-purdue.php",
+      "status": 200,
+      "finalUrl": "https://it.purdue.edu/services/new-to-purdue.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
       "id": "libraries",
       "name": "Purdue Libraries",
       "url": "https://www.lib.purdue.edu/",
@@ -328,6 +346,15 @@
       "url": "https://www.purdue.edu/advisors/locationchange.php",
       "status": 200,
       "finalUrl": "https://www.purdue.edu/advisors/locationchange.php",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "mobile-id-card",
+      "name": "Purdue Mobile ID & Card Operations",
+      "url": "https://www.purdue.edu/treasurer/finance/card/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/treasurer/finance/card/",
       "redirected": false,
       "classification": "ok"
     },
@@ -395,6 +422,15 @@
       "classification": "ok"
     },
     {
+      "id": "residence-mail-packages",
+      "name": "Residence hall mail & packages",
+      "url": "https://www.housing.purdue.edu/my-housing/info/general/postal-service.html",
+      "status": 200,
+      "finalUrl": "https://www.housing.purdue.edu/my-housing/info/general/postal-service.html",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
       "id": "career-resources",
       "name": "Student career resources",
       "url": "https://www.cco.purdue.edu/students/resources",
@@ -409,6 +445,15 @@
       "url": "https://www.purdue.edu/odos/sls/",
       "status": 200,
       "finalUrl": "https://www.purdue.edu/odos/sls/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "student-parking",
+      "name": "Student parking permits",
+      "url": "https://www.purdue.edu/operations/parking/home/permits/students/",
+      "status": 200,
+      "finalUrl": "https://www.purdue.edu/operations/parking/home/permits/students/",
       "redirected": false,
       "classification": "ok"
     },
@@ -436,6 +481,15 @@
       "url": "https://www.housing.purdue.edu/",
       "status": 200,
       "finalUrl": "https://www.housing.purdue.edu/",
+      "redirected": false,
+      "classification": "ok"
+    },
+    {
+      "id": "residence-laundry",
+      "name": "University Residences laundry",
+      "url": "https://www.housing.purdue.edu/my-housing/info/amenities-accommodations/laundry.html",
+      "status": 200,
+      "finalUrl": "https://www.housing.purdue.edu/my-housing/info/amenities-accommodations/laundry.html",
       "redirected": false,
       "classification": "ok"
     },
