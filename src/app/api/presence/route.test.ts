@@ -51,6 +51,14 @@ describe("POST /api/presence", () => {
     expect(response.headers.get("x-content-type-options")).toBe("nosniff");
     expect(await response.json()).toEqual({ activeNow: 3 });
     expect(presence.heartbeat).toHaveBeenCalledWith(SESSION_ID);
+    expect(presence.checkRateLimit).toHaveBeenCalledWith(
+      "heartbeat-ip",
+      "203.0.113.42",
+    );
+    expect(presence.checkRateLimit).toHaveBeenCalledWith(
+      "heartbeat-session",
+      SESSION_ID,
+    );
     expect(
       JSON.stringify(
         await handlePresenceRequest(request(), presence).then((value) =>

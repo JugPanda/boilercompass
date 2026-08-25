@@ -13,12 +13,35 @@ class FakePresenceRedis implements PresenceRedis {
   readonly counters = new Map<string, number>();
   readonly expirations = new Map<string, number>();
 
-  async zadd(key: string, item: { score: number; member: string }) {
-    const set = this.sortedSets.get(key) ?? new Map<string, number>();
-    const existed = set.has(item.member);
-    set.set(item.member, item.score);
-    this.sortedSets.set(key, set);
-    return existed ? 0 : 1;
+  async recordHeartbeat(
+    input: Parameters<PresenceRedis["recordHeartbeat"]>[0],
+  ) {
+    const active =
+      this.sortedSets.get(input.activeKey) ?? new Map<string, number>();
+    active.set(input.member, input.currentMs);
+    for (const [member, score] of active) {
+      if (score < input.activeCutoffMs) active.delete(member);
+    }
+    this.sortedSets.set(input.activeKey, active);
+    this.expirations.set(input.activeKey, input.activeTtlSeconds);
+
+    const activeNow = [...active.values()].filter(
+      (score) => score >= input.activeCutoffMs,
+    ).length;
+    const samples =
+      this.sortedSets.get(input.samplesKey) ?? new Map<string, number>();
+    for (const [member, score] of samples) {
+      if (score === input.minuteMs || score < input.sampleCutoffMs) {
+        samples.delete(member);
+      }
+    }
+    samples.set(
+      JSON.stringify({ timestamp: input.sampleTimestamp, active: activeNow }),
+      input.minuteMs,
+    );
+    this.sortedSets.set(input.samplesKey, samples);
+    this.expirations.set(input.samplesKey, input.sampleTtlSeconds);
+    return activeNow;
   }
 
   async zremrangebyscore(
@@ -68,9 +91,10 @@ class FakePresenceRedis implements PresenceRedis {
     return 1 as const;
   }
 
-  async incr(key: string) {
+  async incrementWithExpiry(key: string, ttlSeconds: number) {
     const next = (this.counters.get(key) ?? 0) + 1;
     this.counters.set(key, next);
+    this.expirations.set(key, ttlSeconds);
     return next;
   }
 }
@@ -154,6 +178,49 @@ describe("anonymous presence storage", () => {
     ).toBeGreaterThanOrEqual(7_200);
   });
 
+  it("atomically keeps one sample under concurrent same-minute heartbeats", async () => {
+    const redis = new FakePresenceRedis();
+    const presence = createPresenceService({
+      redis,
+      namespace: "bc:production",
+      secret: "test-presence-secret",
+      now: () => new Date("2026-08-25T12:00:30.000Z"),
+    });
+
+    await Promise.all(
+      Array.from({ length: 20 }, (_, index) =>
+        presence.heartbeat(
+          `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+        ),
+      ),
+    );
+
+    expect(redis.sortedSets.get("bc:production:samples")).toHaveLength(1);
+    await expect(presence.getSnapshot()).resolves.toMatchObject({
+      activeNow: 20,
+    });
+  });
+
+  it("does not perform partial writes when the atomic heartbeat fails", async () => {
+    class FailingRedis extends FakePresenceRedis {
+      override async recordHeartbeat(): Promise<number> {
+        throw new Error("simulated atomic provider failure");
+      }
+    }
+    const redis = new FailingRedis();
+    const presence = createPresenceService({
+      redis,
+      namespace: "bc:production",
+      secret: "test-presence-secret",
+    });
+
+    await expect(presence.heartbeat(SESSION_A)).rejects.toThrow(
+      "simulated atomic provider failure",
+    );
+    expect(redis.sortedSets.size).toBe(0);
+    expect(redis.expirations.size).toBe(0);
+  });
+
   it("isolates production, preview branches, and custom base namespaces", () => {
     const production = buildPresenceNamespace({
       PUBLIC_STATS_NAMESPACE: "boilercompass",
@@ -184,22 +251,48 @@ describe("anonymous presence storage", () => {
       namespace: "bc:production",
       secret: "test-presence-secret",
       now: () => new Date("2026-08-25T12:00:00.000Z"),
-      rateLimits: { heartbeat: { limit: 2, windowSeconds: 60 } },
+      rateLimits: {
+        "heartbeat-session": { limit: 2, windowSeconds: 60 },
+      },
     });
 
     await expect(
-      presence.checkRateLimit("heartbeat", "203.0.113.42"),
+      presence.checkRateLimit("heartbeat-session", SESSION_A),
     ).resolves.toMatchObject({ allowed: true });
     await expect(
-      presence.checkRateLimit("heartbeat", "203.0.113.42"),
+      presence.checkRateLimit("heartbeat-session", SESSION_A),
     ).resolves.toMatchObject({ allowed: true });
     await expect(
-      presence.checkRateLimit("heartbeat", "203.0.113.42"),
+      presence.checkRateLimit("heartbeat-session", SESSION_A),
     ).resolves.toMatchObject({ allowed: false });
 
     const keys = [...redis.counters.keys()];
     expect(keys).toHaveLength(1);
-    expect(keys[0]).not.toContain("203.0.113.42");
+    expect(keys[0]).not.toContain(SESSION_A);
     expect(redis.expirations.get(keys[0])).toBeGreaterThanOrEqual(60);
+  });
+
+  it("allows many sessions behind one shared address while limiting one tab", async () => {
+    const redis = new FakePresenceRedis();
+    const presence = createPresenceService({
+      redis,
+      namespace: "bc:production",
+      secret: "test-presence-secret",
+      now: () => new Date("2026-08-25T12:00:00.000Z"),
+    });
+
+    for (let index = 0; index < 100; index += 1) {
+      await expect(
+        presence.checkRateLimit("heartbeat-ip", "203.0.113.42"),
+      ).resolves.toMatchObject({ allowed: true });
+    }
+    for (let index = 0; index < 6; index += 1) {
+      await expect(
+        presence.checkRateLimit("heartbeat-session", SESSION_A),
+      ).resolves.toMatchObject({ allowed: true });
+    }
+    await expect(
+      presence.checkRateLimit("heartbeat-session", SESSION_A),
+    ).resolves.toMatchObject({ allowed: false });
   });
 });

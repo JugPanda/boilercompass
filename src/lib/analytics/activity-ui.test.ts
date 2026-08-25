@@ -4,6 +4,7 @@ import {
   buildLinePath,
   formatCount,
   formatTrackingDate,
+  getRecentLiveSamples,
   getCompactMetrics,
   parsePublicStats,
 } from "@/lib/analytics/activity-ui";
@@ -113,6 +114,23 @@ describe("public activity formatting", () => {
 });
 
 describe("activity chart geometry", () => {
+  it("keeps only samples from the preceding 60 minutes", () => {
+    expect(
+      getRecentLiveSamples(
+        [
+          { timestamp: "2026-08-25T20:59:00.000Z", active: 9 },
+          { timestamp: "2026-08-25T21:00:00.000Z", active: 1 },
+          { timestamp: "2026-08-25T21:45:00.000Z", active: 2 },
+          { timestamp: "2026-08-25T22:01:00.000Z", active: 7 },
+        ],
+        "2026-08-25T22:00:00.000Z",
+      ),
+    ).toEqual([
+      { timestamp: "2026-08-25T21:00:00.000Z", active: 1 },
+      { timestamp: "2026-08-25T21:45:00.000Z", active: 2 },
+    ]);
+  });
+
   it("maps values into a padded fixed viewBox", () => {
     expect(buildChartPoints([0, 5, 10], 100, 50, 10)).toEqual([
       { x: 10, y: 40 },

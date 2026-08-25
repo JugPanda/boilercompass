@@ -17,10 +17,19 @@ export type PresenceSnapshot = {
 };
 
 export type PresenceRedis = {
-  zadd(
-    key: string,
-    item: { score: number; member: string },
-  ): Promise<number | null>;
+  recordHeartbeat(input: {
+    activeKey: string;
+    samplesKey: string;
+    member: string;
+    currentMs: number;
+    activeCutoffMs: number;
+    minuteMs: number;
+    sampleCutoffMs: number;
+    sampleTimestamp: string;
+    activeTtlSeconds: number;
+    sampleTtlSeconds: number;
+  }): Promise<number>;
+  incrementWithExpiry(key: string, ttlSeconds: number): Promise<number>;
   zremrangebyscore(
     key: string,
     min: number | string,
@@ -38,10 +47,10 @@ export type PresenceRedis = {
     options: { byScore: true },
   ): Promise<string[]>;
   expire(key: string, seconds: number): Promise<0 | 1>;
-  incr(key: string): Promise<number>;
 };
 
-export type RateLimitScope = "heartbeat" | "public-stats";
+export type RateLimitScope =
+  "heartbeat-ip" | "heartbeat-session" | "public-stats";
 export type PresenceService = {
   heartbeat(presenceId: string): Promise<PresenceSnapshot>;
   getSnapshot(): Promise<PresenceSnapshot>;
@@ -94,7 +103,8 @@ export function createPresenceService({
   secret,
   now = () => new Date(),
   rateLimits = {
-    heartbeat: { limit: 12, windowSeconds: 60 },
+    "heartbeat-ip": { limit: 600, windowSeconds: 60 },
+    "heartbeat-session": { limit: 6, windowSeconds: 60 },
     "public-stats": { limit: 120, windowSeconds: 60 },
   },
 }: {
@@ -140,19 +150,18 @@ export function createPresenceService({
     async heartbeat(presenceId) {
       const current = now();
       const currentMs = current.getTime();
-      await redis.zadd(activeKey, {
-        score: currentMs,
-        member: hmac(secret, `presence:${presenceId}`),
-      });
-      const activeNow = await pruneAndCount(currentMs);
       const minuteMs = minuteStartMs(current);
-      await redis.zremrangebyscore(samplesKey, minuteMs, minuteMs);
-      await redis.zadd(samplesKey, {
-        score: minuteMs,
-        member: JSON.stringify({
-          timestamp: new Date(minuteMs).toISOString(),
-          active: activeNow,
-        }),
+      const activeNow = await redis.recordHeartbeat({
+        activeKey,
+        samplesKey,
+        member: hmac(secret, `presence:${presenceId}`),
+        currentMs,
+        activeCutoffMs: currentMs - ACTIVE_WINDOW_MS,
+        minuteMs,
+        sampleCutoffMs: minuteMs - SAMPLE_RETENTION_MINUTES * 60_000,
+        sampleTimestamp: new Date(minuteMs).toISOString(),
+        activeTtlSeconds: ACTIVE_KEY_TTL_SECONDS,
+        sampleTtlSeconds: SAMPLE_KEY_TTL_SECONDS,
       });
       const liveTrend = await readSamples(currentMs);
       return { activeNow, liveTrend };
@@ -178,8 +187,10 @@ export function createPresenceService({
         secret,
         `rate:${address}`,
       )}`;
-      const count = await redis.incr(key);
-      await redis.expire(key, config.windowSeconds + 5);
+      const count = await redis.incrementWithExpiry(
+        key,
+        config.windowSeconds + 5,
+      );
       return {
         allowed: count <= config.limit,
         retryAfterSeconds: Math.max(
@@ -191,10 +202,52 @@ export function createPresenceService({
   };
 }
 
+const RECORD_HEARTBEAT_SCRIPT = `
+redis.call("ZADD", KEYS[1], ARGV[1], ARGV[2])
+redis.call("ZREMRANGEBYSCORE", KEYS[1], "-inf", tonumber(ARGV[3]) - 1)
+local active = redis.call("ZCOUNT", KEYS[1], ARGV[3], "+inf")
+redis.call("EXPIRE", KEYS[1], ARGV[4])
+redis.call("ZREMRANGEBYSCORE", KEYS[2], ARGV[5], ARGV[5])
+local sample = cjson.encode({ timestamp = ARGV[6], active = active })
+redis.call("ZADD", KEYS[2], ARGV[5], sample)
+redis.call("ZREMRANGEBYSCORE", KEYS[2], "-inf", tonumber(ARGV[7]) - 1)
+redis.call("EXPIRE", KEYS[2], ARGV[8])
+return active
+`;
+
+const INCREMENT_WITH_EXPIRY_SCRIPT = `
+local count = redis.call("INCR", KEYS[1])
+redis.call("EXPIRE", KEYS[1], ARGV[1])
+return count
+`;
+
 function upstashAdapter(redis: Redis): PresenceRedis {
   type UpstashScore = number | "-inf" | "+inf" | `(${number}`;
   return {
-    zadd: (key, item) => redis.zadd(key, item),
+    recordHeartbeat: (input) =>
+      redis.eval<
+        [number, string, number, number, number, string, number, number],
+        number
+      >(
+        RECORD_HEARTBEAT_SCRIPT,
+        [input.activeKey, input.samplesKey],
+        [
+          input.currentMs,
+          input.member,
+          input.activeCutoffMs,
+          input.activeTtlSeconds,
+          input.minuteMs,
+          input.sampleTimestamp,
+          input.sampleCutoffMs,
+          input.sampleTtlSeconds,
+        ],
+      ),
+    incrementWithExpiry: (key, ttlSeconds) =>
+      redis.eval<[number], number>(
+        INCREMENT_WITH_EXPIRY_SCRIPT,
+        [key],
+        [ttlSeconds],
+      ),
     zremrangebyscore: (key, min, max) =>
       redis.zremrangebyscore(key, min as UpstashScore, max as UpstashScore),
     zcount: (key, min, max) =>
@@ -202,7 +255,6 @@ function upstashAdapter(redis: Redis): PresenceRedis {
     zrange: (key, min, max, options) =>
       redis.zrange<string[]>(key, min, max as number | "+inf", options),
     expire: (key, seconds) => redis.expire(key, seconds),
-    incr: (key) => redis.incr(key),
   };
 }
 

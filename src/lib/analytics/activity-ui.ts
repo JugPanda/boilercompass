@@ -170,6 +170,20 @@ export function getCompactMetrics(stats: PublicStats): ActivityMetric[] {
   ];
 }
 
+export function getRecentLiveSamples(
+  samples: LiveActivityPoint[],
+  updatedAt: string,
+  windowMinutes = 60,
+): LiveActivityPoint[] {
+  const end = Date.parse(updatedAt);
+  if (!Number.isFinite(end) || windowMinutes <= 0) return [];
+  const start = end - windowMinutes * 60_000;
+  return samples.filter((sample) => {
+    const timestamp = Date.parse(sample.timestamp);
+    return Number.isFinite(timestamp) && timestamp >= start && timestamp <= end;
+  });
+}
+
 function roundCoordinate(value: number) {
   return Math.round(value * 100) / 100;
 }

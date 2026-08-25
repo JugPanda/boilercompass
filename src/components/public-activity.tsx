@@ -9,6 +9,7 @@ import {
   formatTrackingDate,
   formatUpdatedAt,
   getCompactMetrics,
+  getRecentLiveSamples,
   parsePublicStats,
   type ActivityMetric,
   type PublicStats,
@@ -153,7 +154,7 @@ function formatDay(date: string) {
 }
 
 function liveSummary(stats: PublicStats) {
-  const samples = stats.liveTrend.slice(-60);
+  const samples = getRecentLiveSamples(stats.liveTrend, stats.updatedAt);
   if (samples.length === 0) return "No live minute samples are available yet.";
   const values = samples.map((sample) => sample.active);
   const latest = values.at(-1) ?? 0;
@@ -170,7 +171,7 @@ function dailySummary(stats: PublicStats) {
 }
 
 function DetailedActivity({ stats }: { stats: PublicStats }) {
-  const liveSamples = stats.liveTrend.slice(-60);
+  const liveSamples = getRecentLiveSamples(stats.liveTrend, stats.updatedAt);
   const dailySamples = stats.dailyTrend.slice(-30);
   const hasStartDate =
     stats.trackingStartedAt.trim() !== "" &&
@@ -284,22 +285,31 @@ function Definitions({
 export function PublicActivityDetail() {
   const state = usePublicStats();
 
-  return (
-    <div aria-live="polite" aria-busy={state.status === "loading"}>
-      {state.status === "ready" ? (
+  if (state.status === "ready") {
+    return (
+      <>
+        <p className="sr-only" aria-live="polite">
+          Public activity aggregates updated.
+        </p>
         <DetailedActivity stats={state.stats} />
-      ) : (
-        <>
-          <div className="activity-detail-unavailable">
-            <ActivityStatus status={state.status} />
-            <p>
-              No zeros are substituted, and no trend line is drawn without exact
-              public samples.
-            </p>
-          </div>
-          <Definitions definitions={fallbackDefinitions} />
-        </>
-      )}
-    </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div
+        className="activity-detail-unavailable"
+        aria-live="polite"
+        aria-busy={state.status === "loading"}
+      >
+        <ActivityStatus status={state.status} />
+        <p>
+          No zeros are substituted, and no trend line is drawn without exact
+          public samples.
+        </p>
+      </div>
+      <Definitions definitions={fallbackDefinitions} />
+    </>
   );
 }

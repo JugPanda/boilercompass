@@ -72,13 +72,15 @@ export async function handlePresenceRequest(
   }
 
   try {
-    const limit = await presence.checkRateLimit(
-      "heartbeat",
-      requestAddress(request),
-    );
-    if (!limit.allowed) {
+    const [ipLimit, sessionLimit] = await Promise.all([
+      presence.checkRateLimit("heartbeat-ip", requestAddress(request)),
+      presence.checkRateLimit("heartbeat-session", parsed.presenceId),
+    ]);
+    if (!ipLimit.allowed || !sessionLimit.allowed) {
       return response({ activeNow: null }, 429, {
-        "Retry-After": String(limit.retryAfterSeconds),
+        "Retry-After": String(
+          Math.max(ipLimit.retryAfterSeconds, sessionLimit.retryAfterSeconds),
+        ),
       });
     }
     const snapshot = await presence.heartbeat(parsed.presenceId);
