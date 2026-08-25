@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Route, ShieldCheck, Sparkles } from "lucide-react";
 import { GlobalSearch } from "@/components/global-search";
+import { PublicActivityCompact } from "@/components/public-activity";
 import { ResourceCard } from "@/components/resource-card";
 import { RouteMotif } from "@/components/route-motif";
 import { SourceLabelHelp } from "@/components/source-label-help";
@@ -151,6 +152,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <PublicActivityCompact />
 
       <section className="section task-section">
         <div className="shell">
