@@ -1,6 +1,7 @@
 "use client";
 
 import { Analytics, type BeforeSendEvent } from "@vercel/analytics/next";
+import { PresenceHeartbeat } from "@/components/presence-heartbeat";
 import { sanitizeAnalyticsEvent } from "@/lib/analytics/events";
 
 function sanitizePageview(event: BeforeSendEvent): BeforeSendEvent | null {
@@ -8,5 +9,10 @@ function sanitizePageview(event: BeforeSendEvent): BeforeSendEvent | null {
 }
 
 export function AnalyticsRuntime() {
-  return <Analytics beforeSend={sanitizePageview} />;
+  return (
+    <>
+      <PresenceHeartbeat />
+      <Analytics beforeSend={sanitizePageview} />
+    </>
+  );
 }

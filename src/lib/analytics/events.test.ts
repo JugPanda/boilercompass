@@ -124,16 +124,58 @@ describe("analytics pageview sanitizer", () => {
     });
   });
 
-  it("preserves ports and encoded path segments", () => {
+  it("normalizes dynamic resource paths without exposing identifiers", () => {
     expect(
       sanitizeAnalyticsEvent({
         type: "pageview" as const,
-        url: "http://localhost:3000/resources/course%20tools?token=secret#top",
+        url: "http://localhost:3000/resources/financial-aid?token=secret#top",
       }),
     ).toEqual({
       type: "pageview",
-      url: "http://localhost:3000/resources/course%20tools",
+      url: "http://localhost:3000/resources/[id]",
     });
+  });
+
+  it("normalizes guide slugs and preserves only allowlisted static routes", () => {
+    expect(
+      sanitizeAnalyticsEvent({
+        type: "pageview" as const,
+        url: "https://boilercompass.com/guides/understanding-financial-aid-offer",
+      }),
+    ).toEqual({
+      type: "pageview",
+      url: "https://boilercompass.com/guides/[slug]",
+    });
+    expect(
+      sanitizeAnalyticsEvent({
+        type: "pageview" as const,
+        url: "https://boilercompass.com/about/activity?source=private",
+      }),
+    ).toEqual({
+      type: "pageview",
+      url: "https://boilercompass.com/about/activity",
+    });
+  });
+
+  it.each(["/resources/caps", "/resources/care", "/resources/financial-aid"])(
+    "never emits sensitive resource slug %s",
+    (pathname) => {
+      const sanitized = sanitizeAnalyticsEvent({
+        type: "pageview" as const,
+        url: `https://boilercompass.com${pathname}`,
+      });
+      expect(sanitized?.url).toBe("https://boilercompass.com/resources/[id]");
+      expect(sanitized?.url).not.toContain(pathname.split("/").at(-1));
+    },
+  );
+
+  it("rejects unknown path shapes rather than sending them", () => {
+    expect(
+      sanitizeAnalyticsEvent({
+        type: "pageview" as const,
+        url: "https://boilercompass.com/private/student/123",
+      }),
+    ).toBeNull();
   });
 
   it.each(["not a url", "/relative?query=private", "data:text/plain,secret"])(

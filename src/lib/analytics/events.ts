@@ -94,6 +94,23 @@ export function mapCategoryToAnalyticsGroup(
   return safeCategoryGroups[category as keyof typeof safeCategoryGroups];
 }
 
+const analyticsStaticPaths = new Set([
+  "/",
+  "/about",
+  "/about/activity",
+  "/guides",
+  "/resources",
+  "/support",
+]);
+
+function normalizeAnalyticsPath(pathname: string): string | null {
+  const normalized = pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
+  if (analyticsStaticPaths.has(normalized)) return normalized;
+  if (/^\/resources\/[^/]+$/.test(normalized)) return "/resources/[id]";
+  if (/^\/guides\/[^/]+$/.test(normalized)) return "/guides/[slug]";
+  return null;
+}
+
 export function sanitizeAnalyticsEvent<Event extends { url: string }>(
   event: Event,
 ): Event | null {
@@ -102,10 +119,12 @@ export function sanitizeAnalyticsEvent<Event extends { url: string }>(
     if (parsedUrl.protocol !== "https:" && parsedUrl.protocol !== "http:") {
       return null;
     }
+    const pathname = normalizeAnalyticsPath(parsedUrl.pathname);
+    if (!pathname) return null;
 
     return {
       ...event,
-      url: `${parsedUrl.origin}${parsedUrl.pathname}`,
+      url: `${parsedUrl.origin}${pathname}`,
     };
   } catch {
     return null;
