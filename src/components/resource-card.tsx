@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { SourceBadge } from "@/components/resource-badges";
 import type { Resource } from "@/data/resources";
+import { trackAnalyticsEvent } from "@/lib/analytics/events";
 import { campusLabel } from "@/lib/resource-search";
 
 const FAVORITES_KEY = "boilercompass:favorites";
@@ -95,6 +96,13 @@ export function ResourceCard({
     );
   }
 
+  function openResource() {
+    saveRecent(resource.id);
+    trackAnalyticsEvent("resource_opened", {
+      source_type: resource.sourceType,
+    });
+  }
+
   return (
     <article className="resource-card" data-resource-id={resource.id}>
       <div className="resource-card-top">
@@ -149,7 +157,7 @@ export function ResourceCard({
           href={resource.url}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => saveRecent(resource.id)}
+          onClick={openResource}
           aria-label={`Open ${resource.name} in a new tab`}
         >
           Open {resource.name} <ArrowUpRight size={16} aria-hidden="true" />

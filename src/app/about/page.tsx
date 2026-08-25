@@ -7,6 +7,7 @@ import {
   LockKeyhole,
   Tags,
 } from "lucide-react";
+import { FeedbackLink } from "@/components/feedback-link";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -101,15 +102,14 @@ export default function AboutPage() {
             passwords, student records, medical information, or other sensitive
             data.
           </p>
-          <a
+          <FeedbackLink
             className="button button-primary"
             href={correctionUrl.toString()}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Report a correction in a new tab"
+            surface="about"
+            ariaLabel="Report a correction in a new tab"
           >
             Report a correction
-          </a>
+          </FeedbackLink>
         </div>
       </section>
       <section className="unofficial-block">

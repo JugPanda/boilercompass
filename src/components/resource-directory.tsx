@@ -25,6 +25,10 @@ import {
 } from "@/data/resources";
 import type { Audience, Campus, ResourceSourceType } from "@/data/resources";
 import {
+  mapCategoryToAnalyticsGroup,
+  trackAnalyticsEvent,
+} from "@/lib/analytics/events";
+import {
   audienceLabel,
   campusLabel,
   filterResources,
@@ -117,6 +121,16 @@ export function ResourceDirectory({
 
   function updateQuery(value: string) {
     setUrlValue("q", value, true);
+  }
+
+  function selectCategory(value: string) {
+    setUrlValue("category", value);
+    const categoryGroup = mapCategoryToAnalyticsGroup(value);
+    if (categoryGroup) {
+      trackAnalyticsEvent("category_filter_selected", {
+        category_group: categoryGroup,
+      });
+    }
   }
 
   function openSavedView(nextView: Exclude<View, "all">) {
@@ -339,7 +353,7 @@ export function ResourceDirectory({
             Category
             <select
               value={category}
-              onChange={(event) => setUrlValue("category", event.target.value)}
+              onChange={(event) => selectCategory(event.target.value)}
             >
               <option value="all">All categories</option>
               {categories.map((item) => (
@@ -454,7 +468,7 @@ export function ResourceDirectory({
                   type="button"
                   aria-pressed={category === item}
                   onClick={() =>
-                    setUrlValue("category", category === item ? "all" : item)
+                    selectCategory(category === item ? "all" : item)
                   }
                 >
                   {item}

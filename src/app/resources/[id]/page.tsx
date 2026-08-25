@@ -13,6 +13,7 @@ import {
   LogIn,
   Users,
 } from "lucide-react";
+import { FeedbackLink } from "@/components/feedback-link";
 import { CampusBadge, SourceBadge } from "@/components/resource-badges";
 import { ResourceCard } from "@/components/resource-card";
 import { ResourceLaunchButton } from "@/components/resource-launch-button";
@@ -181,17 +182,17 @@ export default async function ResourceDetailPage({
             <ResourceLaunchButton
               id={resource.id}
               name={resource.name}
+              sourceType={resource.sourceType}
               url={resource.url}
             />
-            <a
+            <FeedbackLink
               className="button button-secondary"
               href={correctionUrl.toString()}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Report an outdated link in a new tab"
+              surface="resource"
+              ariaLabel="Report an outdated link in a new tab"
             >
               <Flag size={16} /> Report an outdated link
-            </a>
+            </FeedbackLink>
           </div>
         </div>
         <aside className="detail-facts" aria-label="Resource facts">
