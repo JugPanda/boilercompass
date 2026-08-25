@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { AnalyticsRuntime } from "@/components/analytics-runtime";
 import { EmergencyNotice } from "@/components/emergency-notice";
 import { SearchLauncherProvider } from "@/components/search-launcher";
 import { SiteFooter } from "@/components/site-footer";
@@ -55,6 +56,7 @@ export default function RootLayout({
             <SiteHeader />
             <main id="main-content">{children}</main>
             <SiteFooter />
+            <AnalyticsRuntime />
           </SearchLauncherProvider>
         </ThemeProvider>
       </body>

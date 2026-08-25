@@ -18,6 +18,7 @@ const auditRoutes = [
   "/guides/parking-and-bringing-a-car",
   "/guides/understanding-financial-aid-offer",
   "/guides/new-student-essentials",
+  "/about/activity",
 ] as const;
 
 for (const reducedMotion of ["no-preference", "reduce"] as const) {

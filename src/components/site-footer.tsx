@@ -18,6 +18,7 @@ export function SiteFooter() {
         <div>
           <strong>Project</strong>
           <Link href="/about">About & methodology</Link>
+          <Link href="/about/activity">Public activity</Link>
           <Link href="/about#privacy">Privacy</Link>
           <Link href="/about#corrections">Report a correction</Link>
         </div>

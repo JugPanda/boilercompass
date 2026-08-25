@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
+  ChartNoAxesCombined,
   CheckCircle2,
   Database,
   Eye,
@@ -7,6 +9,7 @@ import {
   LockKeyhole,
   Tags,
 } from "lucide-react";
+import { FeedbackLink } from "@/components/feedback-link";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -81,13 +84,61 @@ export default function AboutPage() {
         <LockKeyhole />
         <div>
           <p className="eyebrow">Privacy</p>
-          <h2>No accounts. No Purdue passwords.</h2>
+          <h2>Anonymous aggregates, not student profiles.</h2>
           <p>
             BoilerCompass does not use Purdue authentication, proxy
             authenticated systems, or store student records. Favorites and
-            recently opened resources stay in your browser’s local storage. No
-            analytics or tracking are enabled by default.
+            recently opened resources stay in your browser’s local storage.
           </p>
+          <p>
+            When configured and enabled, BoilerCompass uses Vercel Web Analytics
+            for anonymous aggregate measurement. Vercel may privately process
+            and display aggregate referrer, coarse region, device, browser, and
+            operating-system dimensions under its Web Analytics documentation.
+            The BoilerCompass public endpoint and activity page expose only
+            broad totals and trends—not those private dimensions or individual
+            events.
+          </p>
+          <ul className="privacy-list">
+            <li>
+              BoilerCompass custom events never send raw search text, query
+              strings, Purdue IDs or other Purdue identifiers, names, emails, or
+              arbitrary user text.
+            </li>
+            <li>
+              BoilerCompass does not add analytics cookies or cross-site
+              tracking. If anonymous presence is enabled, a random UUID is kept
+              in
+              <code>sessionStorage</code>; a heartbeat is sent about every 30
+              seconds only while the page is visible, and a session is
+              considered active when seen within the last two minutes.
+            </li>
+            <li>
+              Presence stores one aggregate minute sample for up to two hours.
+              Vercel’s request-hash-based visitor session is discarded after 24
+              hours and is not a permanent person identity.
+            </li>
+            <li>
+              JavaScript blockers, ad blockers, privacy tools, network failures,
+              and background tabs can make counts incomplete. Since-start totals
+              use the configured tracking start date and are not backfilled.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section className="about-block">
+        <ChartNoAxesCombined />
+        <div>
+          <p className="eyebrow">Public aggregates</p>
+          <h2>See what BoilerCompass reports publicly.</h2>
+          <p>
+            The activity page explains every metric, shows exact-value tables
+            alongside lightweight charts, and keeps partial or missing data
+            visibly unavailable.
+          </p>
+          <Link className="button button-ghost" href="/about/activity">
+            View BoilerCompass activity
+          </Link>
         </div>
       </section>
       <section id="corrections" className="about-block">
@@ -101,15 +152,14 @@ export default function AboutPage() {
             passwords, student records, medical information, or other sensitive
             data.
           </p>
-          <a
+          <FeedbackLink
             className="button button-primary"
             href={correctionUrl.toString()}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Report a correction in a new tab"
+            surface="about"
+            ariaLabel="Report a correction in a new tab"
           >
             Report a correction
-          </a>
+          </FeedbackLink>
         </div>
       </section>
       <section className="unofficial-block">

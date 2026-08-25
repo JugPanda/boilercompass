@@ -15,8 +15,9 @@ BoilerCompass is an unofficial, student-friendly directory and task guide for Pu
 - Vitest unit tests
 - Playwright end-to-end and axe accessibility tests
 - Vercel-ready metadata, sitemap, robots, icon, and Open Graph image
+- Privacy-limited Vercel Web Analytics aggregates and short-lived Upstash Redis presence
 
-No database, student account, Purdue authentication, analytics, or secret key is required.
+No student account or Purdue authentication is required. Analytics and presence are optional: without their server-only provider settings, the public activity UI reports metrics as unavailable rather than inventing zeroes.
 
 ## Local setup
 
@@ -32,10 +33,20 @@ Open <http://localhost:3000>.
 
 ```dotenv
 NEXT_PUBLIC_CORRECTIONS_URL=https://github.com/JugPanda/boilercompass/issues/new
+NEXT_PUBLIC_ANALYTICS_TRACKING_START_DATE=
+VERCEL_ANALYTICS_TOKEN=
+VERCEL_ANALYTICS_PROJECT_ID=
+VERCEL_ANALYTICS_TEAM_ID=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+PUBLIC_STATS_NAMESPACE=boilercompass
+PUBLIC_STATS_PRESENCE_SECRET=
 ```
 
 - The production domain is defined centrally as `https://boilercompass.com` in [`src/lib/site.ts`](src/lib/site.ts). Canonical, Open Graph, sitemap, and robots URLs all derive from it.
 - `NEXT_PUBLIC_CORRECTIONS_URL` must be a real public issue or correction-form destination. Query parameters are added to prefill the affected resource and a correction template.
+- Do not set the tracking start date until Web Analytics intake is enabled and verified. Keep provider credentials server-only and use separate Redis resources or namespaces for preview and production.
+- See [`docs/analytics-and-presence.md`](docs/analytics-and-presence.md) for architecture, metric definitions, privacy, retention, plan limitations, and deployment checks.
 
 ### Project preview assets
 

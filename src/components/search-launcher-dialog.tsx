@@ -20,6 +20,7 @@ import {
   type SetStateAction,
 } from "react";
 import { resourceRegistry } from "@/data/resources";
+import { bucketResultCount, trackAnalyticsEvent } from "@/lib/analytics/events";
 import {
   campusLabel,
   searchResources,
@@ -60,18 +61,22 @@ export function SearchLauncherDialog({
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  const results = useMemo(
-    () =>
-      query.trim() ? searchResources(resourceRegistry, query).slice(0, 8) : [],
+  const allResults = useMemo(
+    () => (query.trim() ? searchResources(resourceRegistry, query) : []),
     [query],
   );
+  const results = allResults.slice(0, 8);
 
   const choose = useCallback(
     (id: string) => {
       close();
       router.push(`/resources/${id}`);
+      trackAnalyticsEvent("search_submitted", {
+        result_count_bucket: bucketResultCount(allResults.length),
+        surface: "launcher",
+      });
     },
-    [close, router],
+    [allResults.length, close, router],
   );
 
   useEffect(() => {
@@ -126,6 +131,17 @@ export function SearchLauncherDialog({
     } else if (event.key === "Enter") {
       event.preventDefault();
       choose(results[activeIndex].id);
+    }
+  }
+
+  function browseAll() {
+    close();
+    trackAnalyticsEvent("search_submitted", {
+      result_count_bucket: bucketResultCount(allResults.length),
+      surface: "launcher",
+    });
+    if (query.trim() && allResults.length === 0) {
+      trackAnalyticsEvent("search_no_results", { surface: "launcher" });
     }
   }
 
@@ -310,7 +326,7 @@ export function SearchLauncherDialog({
                 </span>
                 <Link
                   href={`/resources${query.trim() && results.length ? `?q=${encodeURIComponent(query)}` : ""}`}
-                  onClick={close}
+                  onClick={browseAll}
                 >
                   Browse all results <ArrowRight size={15} />
                 </Link>

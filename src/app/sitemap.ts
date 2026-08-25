@@ -5,7 +5,14 @@ import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = "2026-08-05";
-  const staticRoutes = ["", "/resources", "/guides", "/about", "/support"];
+  const staticRoutes = [
+    "",
+    "/resources",
+    "/guides",
+    "/about",
+    "/about/activity",
+    "/support",
+  ];
   return [
     ...staticRoutes.map((route, index) => ({
       url: absoluteUrl(route),
