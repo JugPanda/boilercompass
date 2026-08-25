@@ -409,7 +409,10 @@ test("primary routes stay free of console and same-origin HTTP errors", async ({
 }) => {
   const errors = collectRuntimeErrors(page);
   for (const route of verificationRoutes) {
-    await page.goto(route, { waitUntil: "networkidle" });
+    // Presence heartbeats are intentionally recurrent, so networkidle is not a
+    // valid readiness signal for these pages.
+    await page.goto(route, { waitUntil: "load" });
+    await page.waitForTimeout(100);
   }
   expect(errors).toEqual([]);
 });

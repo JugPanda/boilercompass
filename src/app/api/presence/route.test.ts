@@ -122,14 +122,14 @@ describe("POST /api/presence", () => {
     expect(presence.heartbeat).not.toHaveBeenCalled();
   });
 
-  it("fails safely when presence storage is unavailable", async () => {
+  it("degrades to an unavailable aggregate when presence storage fails", async () => {
     const presence = service();
     presence.heartbeat.mockRejectedValueOnce(
       new Error("contains private upstream detail"),
     );
     const response = await handlePresenceRequest(request(), presence);
 
-    expect(response.status).toBe(503);
+    expect(response.status).toBe(200);
     const text = await response.text();
     expect(JSON.parse(text)).toEqual({ activeNow: null });
     expect(text).not.toContain("private upstream detail");

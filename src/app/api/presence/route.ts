@@ -84,14 +84,14 @@ export async function handlePresenceRequest(
     const snapshot = await presence.heartbeat(parsed.presenceId);
     return response({ activeNow: snapshot.activeNow }, 200);
   } catch {
-    return response({ activeNow: null }, 503, { "Retry-After": "30" });
+    return response({ activeNow: null }, 200);
   }
 }
 
 export async function POST(request: Request): Promise<Response> {
   const presence = createPresenceServiceFromEnv();
   if (!presence) {
-    return response({ activeNow: null }, 503, { "Retry-After": "30" });
+    return response({ activeNow: null }, 200);
   }
   return handlePresenceRequest(request, presence);
 }
