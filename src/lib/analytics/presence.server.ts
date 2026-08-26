@@ -45,7 +45,7 @@ export type PresenceRedis = {
     min: number,
     max: number | string,
     options: { byScore: true },
-  ): Promise<string[]>;
+  ): Promise<unknown[]>;
   expire(key: string, seconds: number): Promise<0 | 1>;
 };
 
@@ -138,7 +138,8 @@ export function createPresenceService({
     });
     return members.flatMap((member) => {
       try {
-        const parsed = sampleSchema.safeParse(JSON.parse(member));
+        const value = typeof member === "string" ? JSON.parse(member) : member;
+        const parsed = sampleSchema.safeParse(value);
         return parsed.success ? [parsed.data] : [];
       } catch {
         return [];
@@ -253,7 +254,7 @@ function upstashAdapter(redis: Redis): PresenceRedis {
     zcount: (key, min, max) =>
       redis.zcount(key, min as UpstashScore, max as UpstashScore),
     zrange: (key, min, max, options) =>
-      redis.zrange<string[]>(key, min, max as number | "+inf", options),
+      redis.zrange<unknown[]>(key, min, max as number | "+inf", options),
     expire: (key, seconds) => redis.expire(key, seconds),
   };
 }

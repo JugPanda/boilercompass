@@ -10,6 +10,8 @@ import {
 } from "@/lib/analytics/presence.server";
 
 class FakePresenceRedis implements PresenceRedis {
+  constructor(private readonly autoDeserializeMembers = false) {}
+
   readonly sortedSets = new Map<string, Map<string, number>>();
   readonly counters = new Map<string, number>();
   readonly expirations = new Map<string, number>();
@@ -78,13 +80,15 @@ class FakePresenceRedis implements PresenceRedis {
     min: number,
     max: number | string,
     options: { byScore: true },
-  ) {
+  ): Promise<unknown[]> {
     expect(options).toEqual({ byScore: true });
     const upper = max === "+inf" ? Infinity : Number(max);
     return [...(this.sortedSets.get(key) ?? new Map()).entries()]
       .filter(([, score]) => score >= min && score <= upper)
       .sort((a, b) => a[1] - b[1])
-      .map(([member]) => member);
+      .map(([member]) =>
+        this.autoDeserializeMembers ? JSON.parse(member) : member,
+      );
   }
 
   async expire(key: string, seconds: number) {
@@ -123,6 +127,22 @@ describe("presence storage", () => {
         PUBLIC_STATS_PRESENCE_SECRET: "unsafe-public-prefix",
       }),
     ).toBeNull();
+  });
+
+  it("reads samples when the Redis SDK auto-deserializes JSON members", async () => {
+    const redis = new FakePresenceRedis(true);
+    const presence = createPresenceService({
+      redis,
+      namespace: "bc:production",
+      secret: "test-presence-secret",
+      now: () => new Date("2026-08-25T12:00:30.000Z"),
+    });
+
+    await presence.heartbeat(SESSION_A);
+    await expect(presence.getSnapshot()).resolves.toMatchObject({
+      activeNow: 1,
+      liveTrend: [{ timestamp: "2026-08-25T12:00:00.000Z", active: 1 }],
+    });
   });
 
   it("deduplicates repeated heartbeats while counting distinct sessions", async () => {
