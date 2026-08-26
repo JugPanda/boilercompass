@@ -4,7 +4,7 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
     <span className="brand-lockup">
       <span className="brand-icon" aria-hidden="true">
-        <BoilerCompassSymbol size={24} />
+        <BoilerCompassSymbol size={44} />
       </span>
       {!compact && <span>BoilerCompass</span>}
     </span>

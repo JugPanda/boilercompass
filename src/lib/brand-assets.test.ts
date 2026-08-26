@@ -6,30 +6,35 @@ import { describe, expect, it } from "vitest";
 const root = process.cwd();
 const read = (path: string) => readFileSync(join(root, path), "utf8");
 
-const brandAssets = [
-  "public/brand/boilercompass-mark.svg",
-  "public/brand/boilercompass-mark-mono.svg",
-  "public/brand/boilercompass-lockup.svg",
-  "public/brand/boilercompass-lockup-light.svg",
-  "public/brand/boilercompass-favicon.svg",
-  "public/brand/boilercompass-maskable.svg",
-];
-
 describe("BoilerCompass production brand package", () => {
-  it("ships clean, editable SVG source assets without embedded raster data", () => {
-    for (const asset of brandAssets) {
-      const svg = read(asset);
-      expect(svg).toContain("<svg");
-      expect(svg).not.toMatch(/<image\b|data:image|<metadata\b|<filter\b/i);
-      expect(svg).not.toContain("Purdue University");
-    }
+  it("ships the supplied source artwork and a transparent web mark", async () => {
+    const source = await sharp(
+      join(root, "public/brand/boilercompass-logo-source.jpg"),
+    ).metadata();
+    const mark = await sharp(
+      join(root, "public/brand/boilercompass-mark.png"),
+    ).metadata();
+
+    expect(source).toMatchObject({
+      width: 1254,
+      height: 1254,
+      format: "jpeg",
+      hasAlpha: false,
+    });
+    expect(mark).toMatchObject({
+      width: 1024,
+      height: 1024,
+      format: "png",
+      hasAlpha: true,
+    });
   });
 
-  it("uses the original route-bearing mark instead of the Lucide Compass", () => {
+  it("uses the supplied compass-and-route artwork in the live brand component", () => {
+    const logo = read("src/components/boilercompass-logo.tsx");
     const brandMark = read("src/components/brand-mark.tsx");
+    expect(logo).toContain("/brand/boilercompass-mark.png");
     expect(brandMark).toContain("BoilerCompassSymbol");
     expect(brandMark).not.toContain('from "lucide-react"');
-    expect(brandMark).not.toContain("<Compass");
   });
 
   it("keeps route decoration semantic-free and category icons centralized", () => {
@@ -48,7 +53,7 @@ describe("BoilerCompass production brand package", () => {
     const og = read("src/app/opengraph-image.tsx");
     expect(og).toContain("Your guide to Purdue, all in one place.");
     expect(og).toContain("Unofficial student resource guide");
-    expect(og).toContain("BoilerCompassLogo");
+    expect(og).toContain("BOILERCOMPASS_MARK_DATA_URI");
   });
 
   it("ships a portfolio preview as 1600 x 1000 PNG and WebP files", async () => {

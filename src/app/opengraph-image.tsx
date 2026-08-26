@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { BoilerCompassLogo } from "@/components/boilercompass-logo";
+import { BOILERCOMPASS_MARK_DATA_URI } from "@/lib/brand-mark-data";
 
 export const alt =
   "BoilerCompass — your guide to Purdue, all in one place. Unofficial student resource guide.";
@@ -77,7 +77,20 @@ export default function OpenGraphImage() {
         <circle cx="422" cy="176" r="10" fill="#cfb991" />
       </svg>
 
-      <BoilerCompassLogo markSize={58} />
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <img src={BOILERCOMPASS_MARK_DATA_URI} width={64} height={64} alt="" />
+        <span
+          style={{
+            color: "#f8f4ea",
+            fontSize: 34,
+            fontWeight: 760,
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+          }}
+        >
+          BoilerCompass
+        </span>
+      </div>
 
       <div
         style={{

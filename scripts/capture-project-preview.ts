@@ -11,6 +11,14 @@ const publicDir = "public/brand";
 const artifactDir = "artifacts/project-preview";
 const previewPngPath = `${publicDir}/boilercompass-project-preview.png`;
 const previewWebpPath = `${publicDir}/boilercompass-project-preview.webp`;
+const localPreview = ["127.0.0.1", "localhost"].includes(
+  new URL(baseURL).hostname,
+);
+const expectedLocalAnalyticsFailure = (value: string) =>
+  localPreview &&
+  (value.includes("/_vercel/insights/") ||
+    value ===
+      "Failed to load resource: the server responded with a status of 404 (Not Found)");
 
 type Theme = "light" | "dark";
 
@@ -38,10 +46,16 @@ async function capture(browser: Browser, theme: Theme): Promise<Capture> {
   const failedRequests: string[] = [];
 
   page.on("console", (message: ConsoleMessage) => {
-    if (message.type() === "error") consoleErrors.push(message.text());
+    if (
+      message.type() === "error" &&
+      !expectedLocalAnalyticsFailure(message.text())
+    ) {
+      consoleErrors.push(message.text());
+    }
   });
   page.on("pageerror", (error) => consoleErrors.push(error.message));
   page.on("requestfailed", (request) => {
+    if (expectedLocalAnalyticsFailure(request.url())) return;
     if (
       ["document", "stylesheet", "script", "font", "image"].includes(
         request.resourceType(),
@@ -53,12 +67,17 @@ async function capture(browser: Browser, theme: Theme): Promise<Capture> {
     }
   });
   page.on("response", (response) => {
-    if (response.status() >= 400) {
+    if (
+      response.status() >= 400 &&
+      !expectedLocalAnalyticsFailure(response.url())
+    ) {
       failedRequests.push(`${response.status()} ${response.url()}`);
     }
   });
 
-  await page.goto(baseURL, { waitUntil: "networkidle" });
+  await page.goto(baseURL, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(500);
   await page.addStyleTag({
     content: `
       html { scroll-behavior: auto !important; scrollbar-width: none !important; }

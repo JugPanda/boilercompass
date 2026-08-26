@@ -1,5 +1,5 @@
 {
-  "source": "http://127.0.0.1:3137",
+  "source": "http://127.0.0.1:3138",
   "viewport": { "width": 1600, "height": 1000 },
   "scrollY": 115,
   "selectedTheme": "light",
@@ -9,12 +9,12 @@
       "heading": "Find the right Purdue resource.",
       "scrollY": 115,
       "logo": {
-        "top": 16,
-        "right": 370,
-        "bottom": 52,
+        "top": 12,
+        "right": 378,
+        "bottom": 56,
         "left": 210,
-        "width": 160,
-        "height": 36
+        "width": 168,
+        "height": 44
       },
       "headingRect": {
         "top": 100,
@@ -53,12 +53,12 @@
       "heading": "Find the right Purdue resource.",
       "scrollY": 115,
       "logo": {
-        "top": 16,
-        "right": 370,
-        "bottom": 52,
+        "top": 12,
+        "right": 378,
+        "bottom": 56,
         "left": 210,
-        "width": 160,
-        "height": 36
+        "width": 168,
+        "height": 44
       },
       "headingRect": {
         "top": 100,
@@ -97,24 +97,24 @@
       "width": 1600,
       "height": 1000,
       "hasAlpha": false,
-      "bytes": 187206,
-      "sha256": "3fe29f923c1234dbfed7dc471e96e3fa2541db619161db13052e996a63fbfa6a"
+      "bytes": 188285,
+      "sha256": "31acc3f177c1e925348b2668afb40ce9bc1ba7cf50f98ad033171d8f0b73d246"
     },
     "webp": {
       "format": "webp",
       "width": 1600,
       "height": 1000,
       "hasAlpha": false,
-      "bytes": 72974,
-      "sha256": "1d9bc4e5d0e79e0e873c1885bc2942156e81ce0c54b84209ab70f074e320df8d"
+      "bytes": 73166,
+      "sha256": "c6159d7af4e390c3ccc008c25fefc64939a3a6e3a15f08666ec3c96e0add9645"
     },
     "thumbnail": {
       "format": "png",
       "width": 400,
       "height": 250,
       "hasAlpha": false,
-      "bytes": 50733,
-      "sha256": "3da340fd27d30ffc04d38b18ce23f1cba84090cc80e8b160d579094a675b3185"
+      "bytes": 50681,
+      "sha256": "814481edf1a6ee9d3cc72ab06269d61ddd55b898d2c79c6847f6a554ff826fc1"
     }
   }
 }
