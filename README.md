@@ -40,7 +40,7 @@ VERCEL_ANALYTICS_TEAM_ID=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 PUBLIC_STATS_NAMESPACE=boilercompass
-PUBLIC_STATS_PRESENCE_SECRET=
+BOILERCOMPASS_PRESENCE_SECRET=
 ```
 
 - The production domain is defined centrally as `https://boilercompass.com` in [`src/lib/site.ts`](src/lib/site.ts). Canonical, Open Graph, sitemap, and robots URLs all derive from it.

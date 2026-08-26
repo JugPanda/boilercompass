@@ -5,6 +5,7 @@ vi.mock("server-only", () => ({}));
 import {
   buildPresenceNamespace,
   createPresenceService,
+  createPresenceServiceFromEnv,
   type PresenceRedis,
 } from "@/lib/analytics/presence.server";
 
@@ -102,7 +103,28 @@ class FakePresenceRedis implements PresenceRedis {
 const SESSION_A = "00a72822-57d5-4ce6-bdc0-62640bbf6687";
 const SESSION_B = "b7f12380-702d-4337-b635-b4be62085289";
 
-describe("anonymous presence storage", () => {
+describe("presence storage", () => {
+  it("accepts Vercel Marketplace Redis variables with a server-only secret", () => {
+    expect(
+      createPresenceServiceFromEnv({
+        KV_REST_API_URL: "https://example.upstash.io",
+        KV_REST_API_TOKEN: "test-marketplace-token",
+        BOILERCOMPASS_PRESENCE_SECRET: "test-server-only-presence-secret",
+        VERCEL_ENV: "production",
+      }),
+    ).not.toBeNull();
+  });
+
+  it("does not use the legacy PUBLIC-prefixed presence secret", () => {
+    expect(
+      createPresenceServiceFromEnv({
+        KV_REST_API_URL: "https://example.upstash.io",
+        KV_REST_API_TOKEN: "test-marketplace-token",
+        PUBLIC_STATS_PRESENCE_SECRET: "unsafe-public-prefix",
+      }),
+    ).toBeNull();
+  });
+
   it("deduplicates repeated heartbeats while counting distinct sessions", async () => {
     const redis = new FakePresenceRedis();
     let now = new Date("2026-08-25T12:00:00.000Z");

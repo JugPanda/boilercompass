@@ -68,10 +68,10 @@ NEXT_PUBLIC_ANALYTICS_TRACKING_START_DATE=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 PUBLIC_STATS_NAMESPACE=boilercompass
-PUBLIC_STATS_PRESENCE_SECRET=
+BOILERCOMPASS_PRESENCE_SECRET=
 ```
 
-`VERCEL_ANALYTICS_TEAM_ID` is optional for a personal project. `PUBLIC_STATS_PRESENCE_SECRET` must be a high-entropy secret whenever Redis is enabled.
+`VERCEL_ANALYTICS_TEAM_ID` is optional for a personal project. `BOILERCOMPASS_PRESENCE_SECRET` must be a high-entropy server-only secret whenever Redis is enabled. Vercel Marketplace's `KV_REST_API_URL` and `KV_REST_API_TOKEN` names are also accepted in place of the `UPSTASH_REDIS_*` names above.
 
 ## Preview/production isolation
 

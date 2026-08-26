@@ -261,9 +261,9 @@ function upstashAdapter(redis: Redis): PresenceRedis {
 export function createPresenceServiceFromEnv(
   env: Record<string, string | undefined> = process.env,
 ): PresenceService | null {
-  const url = env.UPSTASH_REDIS_REST_URL?.trim();
-  const token = env.UPSTASH_REDIS_REST_TOKEN?.trim();
-  const secret = env.PUBLIC_STATS_PRESENCE_SECRET?.trim();
+  const url = (env.UPSTASH_REDIS_REST_URL || env.KV_REST_API_URL)?.trim();
+  const token = (env.UPSTASH_REDIS_REST_TOKEN || env.KV_REST_API_TOKEN)?.trim();
+  const secret = env.BOILERCOMPASS_PRESENCE_SECRET?.trim();
   if (!url || !token || !secret) return null;
   const redis = new Redis({ url, token });
   return createPresenceService({
